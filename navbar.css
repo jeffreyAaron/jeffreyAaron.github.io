@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap');
+
+#navbar{
+    margin: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #333;
+}
+#navbarList{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+   
+    display: inline-flex;
+    align-items: center;
+    list-style-type: none;
+}
+.navbarButton{
+    cursor: pointer;
+    display: inline-block; 
+    color: white;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 300;
+    font-family: 'Poppins', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.navbarButton:hover{
+    color: #4287f5;
+}
+.logo{
+    font-size: 18px;
+    font-weight: 400;
+}
+.navbarButtonRight{
+    margin-left: auto;
+}
