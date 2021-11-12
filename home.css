@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap');
+
+
+#homeEntranceContent {
+    margin: 0;
+    padding: 0;
+    background-image: url("assets/home/background-01.svg");
+    background-size: cover;
+    width: 100%;
+    height: 100vh;
+    font-family: "Source Sans Pro", sans-serif;
+    color: white;
+}
+
+#homeEntranceContent h1 {
+    font-size: 60px;
+}
+
+#homeEntranceContent h2 {
+    font-size: 30px;
+    font-weight: 300;
+    
+}
+
+#homeWelcomeContent {
+    margin-right: 15%;
+    margin-left: 15%;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    display: flex;
+}
+.flexDisplayInPartsVertically {
+    display: flexbox;
+}
+
+#homeInterestsList li{
+    font-size: 30px;
+    font-weight: 400;
+}
