@@ -3,7 +3,7 @@
     margin: 0;
     padding-left: 10px;
     padding-right: 10px;
-    background-color: rgba(0, 0, 0, 0.750);
+    background-color: rgba(0, 0, 0, 0.650);
     top: 0;
     position: sticky;
     backdrop-filter: saturate(180%) blur(20px);
