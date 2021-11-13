@@ -8,7 +8,6 @@
     position: sticky;
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
-    
 }
 
 #navbarList {
@@ -31,12 +30,18 @@
 }
 
 .navbarButton:active {
-    color: #111;
+    color: white;
 }
 
 .logo {
     font-size: 18px;
     font-weight: 400;
+    opacity: 100%;
+    transition: opacity 0.5s ease;
+}
+
+.logo:hover {
+    opacity: 50%;
 }
 
 .navbarButtonRight {
@@ -49,13 +54,13 @@
     background-repeat: no-repeat;
     background-size: 100% 2px, 0 2px;
     background-position: 100% 100%, 50% 100%;
-    transition: background-size 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: background-size 1s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease;
+    opacity: 100%;
 }
 
-.animatedUnderline:active {
-    background-image: linear-gradient(rgba(176, 251, 188, 0), rgba(176, 251, 188, 0)), linear-gradient(#111, #111);
-}
+.animatedUnderline:active {}
 
 .animatedUnderline:hover {
     background-size: 0 2px, 100% 2px;
+    opacity: 50%;
 }
