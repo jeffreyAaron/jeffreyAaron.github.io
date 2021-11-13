@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="navbar.css">
     <link rel="stylesheet" href="home.css">
 
+    <!-- JS Files -->
+    <script src="index.js"></script>
     <title>Jeffrey Aaron Jeyasingh</title>
 </head>
 
@@ -33,10 +35,24 @@
                     <h1>Hello!<br>I’m Jeffrey.</h1>
                     <h2>I enjoy all aspects of</h2>
                     <ul id="homeInterestsList" class="removeListStyle">
-                        <li>computer science<p class="homeInterestsListLinkDirector">  ➜</p></li>
-                        <li>engineering<p class="homeInterestsListLinkDirector">  ➜</p></li>
-                        <li>chemistry<p class="homeInterestsListLinkDirector">  ➜</p></li>
+                        <li data-index="computerScience">computer science<p class="homeInterestsListLinkDirector"></p></li>
+                        <li data-index="engineering">engineering<p class="homeInterestsListLinkDirector"></p></li>
+                        <li data-index="chemistry">chemistry<p class="homeInterestsListLinkDirector"></p></li>
                     </ul>
+                </div>
+                <div id="homeInterestsSection" class="flexDisplayInPartsVertically floatRight">
+                    <div class="homeInterestsInfo" data-index="computerScience">
+                        <h3>Computer Science</h3>
+                        <p>Hey There, I like computer science<br>Hey There, I like computer science </p>
+                    </div>
+                    <div class="homeInterestsInfo" data-index="engineering">
+                        <h3>Engineering</h3>
+                        <p>Hey There, I like engineering<br>Hey There, I like engineering</p>
+                    </div>
+                    <div class="homeInterestsInfo" data-index="chemistry">
+                        <h3>Chemistry</h3>
+                        <p>Hey There, I like chemistry<br>Hey There, I like chemistry</p>
+                    </div>
                 </div>
             </div>
         </div>

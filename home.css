@@ -23,8 +23,8 @@
     transform: scale(1.15, 1.15);
 }
 
-.homeBounceText li:active {
-
+.homeBounceText li:active .homeInterestsListLinkDirector{
+    margin-left: 5px;
 }
 
 #homeEntranceContent h2 {
@@ -37,11 +37,11 @@
     margin-left: 15%;
     margin-top: 10%;
     margin-bottom: 10%;
-    display: flex;
 }
 
 .flexDisplayInPartsVertically {
-    display: flexbox;
+    display: inline-block;
+    width: 50%;
 }
 
 #homeInterestsList li {
@@ -64,4 +64,18 @@
 
 #homeInterestsList li:hover .homeInterestsListLinkDirector {
     opacity: 100%;
+}
+
+#homeInterestsSection {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.homeInterestsInfo {
+    text-align: right;
+    opacity: 0%;
+    height: 30%;
+    flex-grow: 1;
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
