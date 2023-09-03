@@ -6,15 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="./scannerData.js"></script>
     <title>App Dev Scan Data</title>
+    
+    <link rel="stylesheet" href="mainStyle.css">
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="home.css">
+
+
 </head>
 <body>
-    <h1 id="fail">Scans failed: </h1>
-    <h1 id="succ">Scans completed: </h1>
+    <div id="homeContent">
+        <div id="homeEntranceContent">
+            <nav id="navbar">
+                <ul id="navbarList">
+                    <li class="navbarButton logo">App Development Team</li>
+                </ul>
+            </nav>
+            <div style="padding: 32px;">
+                <h1 id="fail">Scans failed: </h1>
+                <h1 id="succ">Scans completed: </h1>
 
-    <h3>Press spacebar to record a successful scan, press enter key to record failed scan.</h1>
+                <h3>Press spacebar to record a successful scan, press enter key to record failed scan.</h3>
 
-    <button id="reset">Reset all data</button>
-
-
+                <button id="reset">Reset all data</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
