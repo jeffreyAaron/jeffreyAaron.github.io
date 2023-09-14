@@ -22,7 +22,7 @@ function updateView() {
     count++
 
     if(count <= msg.length) {
-        setTimeout(updateView, 500)
+        setTimeout(updateView, 100)
     }
 }
 
