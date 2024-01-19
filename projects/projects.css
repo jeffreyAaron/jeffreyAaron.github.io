@@ -29,17 +29,6 @@
 
 }
 
-.card a{
-    color: white;
-}
-
-.card a:active {
-    color: white;
-}
-.card a:visited {
-    color: white;
-}
-
 .cardContent:hover {
     margin: 16px;
     padding: 16px;

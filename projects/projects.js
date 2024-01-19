@@ -44,7 +44,7 @@ function getCardTemplate(title, organization, img, href){
     <div class="card animatedUnderline" onclick="onClick('${href}')">
         <div class="cardContent mouse-cursor-gradient-tracking">
             <img class="cardImage" src="${img}"/>
-            <h1><a href="${href}">${title}</a></h1>
+            <h1><a>${title}</a></h1>
             <p><small>${organization}</small></p>
 
         </div>
