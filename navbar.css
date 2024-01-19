@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap');
-#navbar {
+nav {
     margin: 0;
     padding-left: 10px;
     padding-right: 10px;
@@ -30,7 +30,14 @@
     font-family: 'Source Sans Pro', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-.navbarButton:active {
+.navbarButton a{
+    color: white;
+}
+
+.navbarButton a:active {
+    color: white;
+}
+.navbarButton a:visited {
     color: white;
 }
 
@@ -49,7 +56,7 @@
     margin-left: auto;
 }
 
-.animatedUnderline {
+.animatedUnderline a{
     text-decoration: none;
     background-image: linear-gradient(rgba(176, 251, 188, 0), rgba(176, 251, 188, 0)), linear-gradient(rgba(255, 255, 255, .5), rgba(255, 255, 255, .5));
     background-repeat: no-repeat;
@@ -59,9 +66,9 @@
     opacity: 100%;
 }
 
-.animatedUnderline:active {}
+.animatedUnderline:active a {}
 
-.animatedUnderline:hover {
+.animatedUnderline:hover a {
     background-size: 0 2px, 100% 2px;
     opacity: 50%;
 }
