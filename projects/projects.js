@@ -2,8 +2,8 @@
 
 let data = []
 data.push({
-    title: "Boat Telemetry System",
-    organization: "Applied Engineering",
+    title: "Boat Telemetry Network and Dashboard",
+    organization: "Applied Engineering  -  Arcadia High School",
     img: "boatTelemetrySystemImage.jpg",
     href: "project_pages/boatTelemetrySystemProject.html"
 });
@@ -13,26 +13,26 @@ data.push({
     title: "Computer Vision Research",
     organization: "",
     img: "compterVisionResearch.png",
-    href: "project_pages/boatTelemetrySystemProject.html"
+    href: "project_pages/computerVisionResearchHS.html"
 });
 data.push({
-    title: "Boat Telemet",
-    organization: "Applied Engineering",
-    img: "boatTelemetrySystemImage.jpg",
-    href: "project_pages/boatTelemetrySystemProject.html"
+    title: "Arcadia High Virtual Student ID",
+    organization: "App Development Team - Arcadia High School",
+    img: "appDevNFCReaderImage.jpg",
+    href: "project_pages/appDevNFCReader.html"
 });
-data.push({
-    title: "Boat Tele",
-    organization: "Applied Engineering",
-    img: "boatTelemetrySystemImage.jpg",
-    href: "project_pages/boatTelemetrySystemProject.html"
-});
-data.push({
-    title: "Boat Telej",
-    organization: "Applied Engineering",
-    img: "boatTelemetrySystemImage.jpg",
-    href: "project_pages/boatTelemetrySystemProject.html"
-});
+// data.push({
+//     title: "Boat Tele",
+//     organization: "Applied Engineering",
+//     img: "boatTelemetrySystemImage.jpg",
+//     href: "project_pages/boatTelemetrySystemProject.html"
+// });
+// data.push({
+//     title: "Boat Telej",
+//     organization: "Applied Engineering",
+//     img: "boatTelemetrySystemImage.jpg",
+//     href: "project_pages/boatTelemetrySystemProject.html"
+// });
 
 
 function putInRow(content) {
@@ -44,7 +44,7 @@ function getCardTemplate(title, organization, img, href){
     <div class="card animatedUnderline" onclick="onClick('${href}')">
         <div class="cardContent mouse-cursor-gradient-tracking">
             <img class="cardImage" src="${img}"/>
-            <h1><a>${title}</a></h1>
+            <h2><a>${title}</a></h2>
             <p><small>${organization}</small></p>
 
         </div>

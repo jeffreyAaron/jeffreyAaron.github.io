@@ -7,22 +7,45 @@
     <!-- CSS Files -->
     <link rel="stylesheet" href="../../mainStyle.css">
     <link rel="stylesheet" href="../../navbar.css">
+    <link rel="stylesheet" href="../../projectPage.css">
 
-    <title>Boat Telemetry System Project</title>
+    <title>Template Project</title>
 </head>
 <body>
     <div class="mainContent">
-
+        
         <nav>
             <ul id="navbarList">
-                <li class="navbarButton logo animatedUnderline"><a href="../index.html">Jeffrey Aaron</a></li>
+                <li class="navbarButton logo animatedUnderline"><a href="../../index.html">Jeffrey Aaron</a></li>
                 <div class="navbarButtonRight">
                     <li class="navbarButton animatedUnderline"><a>About</a></li>
-                    <li class="navbarButton animatedUnderline"><a>Projects</a></li>
+                    <li class="navbarButton animatedUnderline"><a href="../projects.html">Projects</a></li>
                     <li class="navbarButton animatedUnderline"><a>My Experience</a></li>
                 </div>
             </ul>
         </nav>
+
+        <div id="textContent">
+            <h1>Boat Telemetry Network and Dashboard</h1>
+            <img src="../boatTelemetrySystemImage.jpg" width="50%">
+            <p>A telemetry network with a range of 5 miles that facilitates communication from our solar boat to our team onshore. Powered by two Ubiquiti Nanostations configured in point-to-point mode. Each telemetry unit is equipped with a compass, gryo, GPS, and stepper motor that allows the uni-directional antennas to maintain connection as the boat moves through the water.</p>
+            <img src="boatTelemetrySystemImages/electronics.jpg" width="50%">
+            <figcaption>Electronics inside</figcaption>
+            <br>
+
+            <p>A Raspberry Pi 4 is used to run the telemetry software. This software provides the driver of the boat and the team live readings of speed, battery percent, current usage, etc. The location of the boat is also mapped by the onboard GPS. The Raspberry Pi is connected to an Arduino that controls the hardware and interfaces with sensors through I2C and Serial. For more robustness, extra effort was made to ensure all sensors are hot-pluggable. </p>
+
+            <img src="boatTelemetrySystemImages/map.png" width="60%"> <br>
+            <img src="boatTelemetrySystemImages/telemetry.png" width="60%">
+            <figcaption>Telemetry software</figcaption> <br>
+
+
+
+            <img src="boatTelemetrySystemImages/ESBlockDiagram.png" width="100%">
+            
+
+        </div>
+
     </div>
     
 </body>
