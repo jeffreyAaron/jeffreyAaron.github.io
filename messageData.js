@@ -9,10 +9,15 @@ window.onload = () => {
     var url = window.location.search
     var urlParams = new URLSearchParams(url);
     msg = urlParams.get("msg")
+    if(msg != null) {
+        msgText.style.visibility = "hidden"
+    }
 
+    document.getElementById("btn").onclick = (event) => {
 
-    console.log(url)
-    updateView()
+        console.log(url)
+        updateView()
+    };
 }
 
 
@@ -21,8 +26,10 @@ function updateView() {
 
     count++
 
+    msgText.style.visibility = "visible"
+
     if(count <= msg.length) {
-        setTimeout(updateView, 100)
+        setTimeout(updateView, 250)
     }
 }
 

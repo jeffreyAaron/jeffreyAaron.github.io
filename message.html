@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="./messageData.js"></script>
-    <title>App Dev Scan Data</title>
+    <title>Message</title>
     
     <link rel="stylesheet" href="mainStyle.css">
     <link rel="stylesheet" href="navbar.css">
@@ -15,14 +15,15 @@
 </head>
 <body>
     <div id="homeContent">
-        <div id="homeEntranceContent">
+        <div>
             <nav id="navbar">
                 <ul id="navbarList">
                     <li class="navbarButton logo">App Development Team</li>
                 </ul>
             </nav>
             <div style="padding: 32px;">
-                <h1 id="msg">Add ?msg={you message} to the end of the url.</h1>
+                <button id="btn" type="button">Reveal Message</button>
+                <h3 id="msg" style='font-family: "Source Sans Pro", sans-serif; animation: fadeIn 1.3s;'>Add ?msg={you message} to the end of the url.</h3>
             </div>
         </div>
     </div>

@@ -1,13 +1,13 @@
 .card {
     margin: 0;
-    display: inline-block;
+    display: inline;
     width: 33.33%;
     float: left;
 }
 
 @media only screen and (max-width: 620px) {
     /* For mobile phones: */
-    .card{
+    img{
       width: 100%;
     }
   }

@@ -12,6 +12,8 @@ img {
     margin-right: auto;
     /* box-shadow: 0 4px 8px 0 rgba(0,0,0,0.5); */
 }
+
+
 h1 {
     text-align: center;
 }
@@ -25,6 +27,21 @@ h1 {
     background-color: #fff;
     margin-left: 15%;
     margin-right: 15%;
+}
+
+@media only screen and (max-width: 620px) {
+    /* For mobile phones: */
+    #textContent{
+        margin: 0;
+        width: 80%;
+        padding-left: 5%;
+        padding-right: 5%;
+        padding-bottom: 5%;
+        display: inline-block;
+        background-color: #fff;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
 }
 
 figcaption {

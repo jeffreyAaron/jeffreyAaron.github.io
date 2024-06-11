@@ -27,6 +27,14 @@ body{
     float: left;
 }
 
+.light {
+    color: white;
+}
+
+.dark {
+    color: black;
+}
+
 .noTransition {
     -webkit-transition: none !important;
     -moz-transition: none !important;
