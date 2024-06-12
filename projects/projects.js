@@ -27,18 +27,18 @@ data.push({
     img: "differentialRobot.png",
     href: "project_pages/boatTelemetrySystemProject.html"
 });
-// data.push({
-//     title: "Boat Telej",
-//     organization: "",
-//     img: "boatTelemetrySystemImage.jpg",
-//     href: "project_pages/boatTelemetrySystemProject.html"
-// });
-// data.push({
-//     title: "Boat Tele",
-//     organization: "",
-//     img: "boatTelemetrySystemImage.jpg",
-//     href: "project_pages/boatTelemetrySystemProject.html"
-// });
+data.push({
+    title: "Mini Watch",
+    organization: "",
+    img: "miniWatch.jpg",
+    href: "project_pages/boatTelemetrySystemProject.html"
+});
+data.push({
+    title: "Car",
+    organization: "",
+    img: "car.bmp",
+    href: "project_pages/boatTelemetrySystemProject.html"
+});
 // data.push({
 //     title: "Boat Telej",
 //     organization: "",
@@ -55,7 +55,7 @@ function getCardTemplate(title, organization, img, href){
     return `
     <div class="animatedUnderline" onclick="onClick('${href}')">
         <div class="cardContent mouse-cursor-gradient-tracking">
-            <img loading="lazy" class="cardImage" src="${img}"/>
+            <img class="cardImage" src="${img}"/>
             <h2><a>${title}</a></h2>
             <p><small>${organization}</small></p>
 
