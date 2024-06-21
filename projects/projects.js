@@ -25,19 +25,19 @@ data.push({
     title: "Differential Drive Robot",
     organization: "",
     img: "differentialRobot.png",
-    href: "project_pages/boatTelemetrySystemProject.html"
+    href: "project_pages/differentialDriveRobot.html"
 });
 data.push({
     title: "Mini Watch",
     organization: "",
     img: "miniWatch.jpg",
-    href: "project_pages/boatTelemetrySystemProject.html"
+    href: "project_pages/miniWatch.html"
 });
 data.push({
     title: "Car",
     organization: "",
-    img: "car.bmp",
-    href: "project_pages/boatTelemetrySystemProject.html"
+    img: "carFrameRendered.bmp",
+    href: "project_pages/carFrame.html"
 });
 // data.push({
 //     title: "Boat Telej",
