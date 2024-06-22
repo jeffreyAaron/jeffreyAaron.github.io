@@ -23,7 +23,7 @@ data.push({
 });
 data.push({
     title: "Differential Drive Robot",
-    organization: "",
+    organization: "Science Olympiad - Arcadia High School",
     img: "differentialRobot.png",
     href: "project_pages/differentialDriveRobot.html"
 });

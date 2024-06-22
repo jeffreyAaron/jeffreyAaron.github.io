@@ -20,13 +20,13 @@
     margin: 16px;
     margin-right: 0;
     padding: 16px;
-    background: #ddd;
+    background-color: #ddd;
     border-radius: 16px;
     border: #666;
     border-width: 2px;
     display: block;
     color: #000;
-    transition: 0.3s box-shadow;
+    transition: 0.3s box-shadow, 0.3s background-color;
 }
 
 .cardImage {
@@ -36,7 +36,7 @@
 }
 
 .cardContent:hover {
-    background: #eee;
+    background-color: #eee;
     border: #666;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.5);
 }
