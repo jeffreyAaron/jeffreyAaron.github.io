@@ -9,6 +9,12 @@ data.push({
     href: "project_pages/computerVisionResearchHS.html"
 });
 data.push({
+    title: "Car Project",
+    organization: "",
+    img: "carProject.PNG",
+    href: "project_pages/carProject.html"
+});
+data.push({
     title: "Boat Telemetry Network and Dashboard",
     organization: "Applied Engineering  -  Arcadia High School",
     img: "boatTelemetrySystemImage.jpg",
