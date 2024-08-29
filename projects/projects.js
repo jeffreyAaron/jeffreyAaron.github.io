@@ -9,23 +9,22 @@ data.push({
     href: "project_pages/computerVisionResearchHS.html"
 });
 data.push({
-    title: "Car Project",
-    organization: "",
-    img: "carProject.PNG",
-    href: "project_pages/carProject.html"
-});
-data.push({
     title: "Boat Telemetry Network and Dashboard",
     organization: "Applied Engineering  -  Arcadia High School",
     img: "boatTelemetrySystemImage.jpg",
     href: "project_pages/boatTelemetrySystemProject.html"
 });
-
 data.push({
     title: "Arcadia High Virtual Student ID",
     organization: "App Development Team - Arcadia High School",
     img: "appDevNFCReaderImage.jpg",
     href: "project_pages/appDevNFCReader.html"
+});
+data.push({
+    title: "Car Project",
+    organization: "",
+    img: "carProject.PNG",
+    href: "project_pages/carProject.html"
 });
 data.push({
     title: "Differential Drive Robot",
