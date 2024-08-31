@@ -6,43 +6,57 @@ data.push({
     title: "Computer Vision Research",
     organization: "",
     img: "compterVisionResearch.png",
-    href: "project_pages/computerVisionResearchHS.html"
+    href: "project_pages/computerVisionResearchHS.html",
+    externalLink: false
 });
 data.push({
     title: "Boat Telemetry Network and Dashboard",
-    organization: "Applied Engineering  -  Arcadia High School",
+    organization: "Arcadia Applied Engineering Team",
     img: "boatTelemetrySystemImage.jpg",
-    href: "project_pages/boatTelemetrySystemProject.html"
+    href: "project_pages/boatTelemetrySystemProject.html",
+    externalLink: false
+});
+data.push({
+    title: "Arcadia High Mobile App",
+    organization: "Arcadia App Development Team",
+    img: "arcadiaHighMobileApp.jpeg",
+    href: "https://get.ahs.app",
+    externalLink: true
 });
 data.push({
     title: "Arcadia High Virtual Student ID",
-    organization: "App Development Team - Arcadia High School",
+    organization: "Arcadia App Development Team",
     img: "appDevNFCReaderImage.jpg",
-    href: "project_pages/appDevNFCReader.html"
+    href: "project_pages/appDevNFCReader.html",
+    externalLink: false
 });
 data.push({
     title: "Car Project",
     organization: "",
     img: "carProject.PNG",
-    href: "project_pages/carProject.html"
+    href: "project_pages/carProject.html",
+    externalLink: false
 });
 data.push({
     title: "Differential Drive Robot",
-    organization: "Science Olympiad - Arcadia High School",
+    organization: "Arcadia Science Olympiad",
     img: "differentialRobot.png",
-    href: "project_pages/differentialDriveRobot.html"
+    href: "project_pages/differentialDriveRobot.html",
+    externalLink: false
 });
 data.push({
     title: "Mini Watch",
-    organization: "",
+    organization: "Personal Project",
     img: "miniWatch.jpg",
-    href: "project_pages/miniWatch.html"
+    href: "project_pages/miniWatch.html",
+    externalLink: false
 });
 data.push({
-    title: "Car",
-    organization: "",
+    title: "Fusion 360 Car",
+    organization: "Personal Project",
     img: "carFrameRendered.bmp",
-    href: "project_pages/carFrame.html"
+    href: "project_pages/carFrame.html",
+    externalLink: false
 });
 // data.push({
 //     title: "Boat Telej",
@@ -56,7 +70,7 @@ function putInRow(content) {
     return `<div class="card">${content}</div>`
 }
 
-function getCardTemplate(title, organization, img, href){
+function getCardTemplate(title, organization, img, href, externalLink){
     return `
     <div class="animatedUnderline" onclick="onClick('${href}')">
         <div class="cardContent mouse-cursor-gradient-tracking">
@@ -81,6 +95,16 @@ window.onload = () => {
 }
 
 function onClick(link) {
+    for (let index = 0; index < data.length; index+=1) {
+        const element = data[index];
+        if(element.externalLink == true) {
+            console.log(element.link + " " + link);
+            if(element.href == link) {
+                window.open(link,"_blank");
+                return;
+            }
+        }
+    }
     console.log("Open: " + link);
     window.open(link,"_self");
 }
@@ -91,7 +115,7 @@ function generateContent() {
         console.log("Index: " + index);
         var col = index%3;
         const element = data[index];
-        cardHtml[col] += getCardTemplate(element.title, element.organization, element.img, element.href);
+        cardHtml[col] += getCardTemplate(element.title, element.organization, element.img, element.href, element.externalLink);
     }
 
     projectsContent.insertAdjacentHTML("beforeend", putInRow(cardHtml[0]));

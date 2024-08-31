@@ -66,7 +66,7 @@ nav {
 
 .animatedUnderline:active a {}
 
-.animatedUnderline:hover a {
+.animatedUnderline a:hover {
     background-size: 0 2px, 100% 2px;
     opacity: 50%;
 }
