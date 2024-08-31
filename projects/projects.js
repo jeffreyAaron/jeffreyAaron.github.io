@@ -31,7 +31,7 @@ data.push({
     externalLink: false
 });
 data.push({
-    title: "Car Project",
+    title: "Fusion 360 Car",
     organization: "",
     img: "carProject.PNG",
     href: "project_pages/carProject.html",
@@ -52,7 +52,7 @@ data.push({
     externalLink: false
 });
 data.push({
-    title: "Fusion 360 Car",
+    title: "Inventor Car",
     organization: "Personal Project",
     img: "carFrameRendered.bmp",
     href: "project_pages/carFrame.html",
