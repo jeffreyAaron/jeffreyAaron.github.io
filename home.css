@@ -77,3 +77,12 @@
     flex-grow: 1;
     transition: opacity 0.5s ease, transform 0.5s ease;
 }
+
+.appearOnHover:hover {
+    opacity: .8;
+}
+
+.appearOnHover {
+    opacity: 0;
+    transition: 0.3s;
+}
