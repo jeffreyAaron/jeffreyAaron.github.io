@@ -74,6 +74,13 @@ h2 {
   color: #111;
 }
 
+h1 {
+  /* letter-spacing: 5px; */
+  /* text-transform: uppercase; */
+  font: 56px "Poppins", sans-serif;
+  color: #111;
+}
+
 p {
   /* letter-spacing: 5px; */
   /* text-transform: uppercase; */
@@ -89,6 +96,25 @@ p {
     text-align: left;
 }
 
+.thirdDivTop {
+    margin: 0px;
+    height: 33.33%;
+    width: 100%;
+    text-align: left;
+}
+
+.blurBar{
+  top: 0;
+  position: fixed;
+  backdrop-filter: blur(5px);
+  background: rgba(10, 10, 10, .8);
+  width: 100%;
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 2;
+  display: inline;
+  padding-left: 80px;
+}
+
 /* Turn off parallax scrolling for tablets and phones
 @media only screen and (max-device-width: 1024px) {
   .bgimg-1, .bgimg-2, .bgimg-3 {
@@ -98,6 +124,9 @@ p {
 </style>
 </head>
 <body>
+  <div class="blurBar">
+    <h5 style="color: #eee;display: inline;">Jeffrey Aaron Jeyasingh&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;ENG 125 Final</h5>
+  </div>
 
 <div class="bgimg-1">
   <div class="caption">
@@ -153,15 +182,16 @@ p {
   </ol>
   <br>
   <h2>Which one would you choose?</h2>
+  <p>Visit this website for more ethical dilemas: <a href="https://www.moralmachine.net">moralmachine.net</a></p>
 
   </div>
   <div style="padding: 50px 80px;">
     <h2>If you chose: </h2>
     <div style="padding-left: 32px;">
-    <h2> <strong>1.</strong> you probably support <strong>Deontological Ethics</strong>.</h2>
+    <h2><strong>1,</strong> you probably support <strong>Deontological Ethics</strong>.</h2>
     <p>Instead of considering the potential of saving 4 lives, you believe that it is right not to perform an action that causes harm. By swerving, you perform an action that hurts a single pedestrian. The deontological view believes that a person should not cause harm, maintaining the good intention of the person.</p>
-    <h2> <strong>2.</strong> you probably support <strong>Utilitarian Ethics</strong>.</h2>
-    <p>The best option here is to chose the option that leads to the least causualties. As simple as this seems, under the pressure of the circumstatnces, it is often hard to people to make desciions leading to inaction. Machines don't have this issue and can be programmed to follow a utilitarian approach.</p>
+    <h2><strong>2,</strong> you probably support <strong>Utilitarian Ethics</strong>.</h2>
+    <p>The best option here is to chose the option that leads to the least causualties. As simple as this seems, under the pressure of the circumstatnces, it is often hard to people to make decision leading to inaction. Machines don't have this issue and can be programmed to follow a utilitarian approach.</p>
   </div>
   </div>
 </div>
@@ -172,15 +202,42 @@ p {
   </div>
 </div>
 
-<div style="position:relative;">
-  <div style="color:#ddd;background-color:#282E34;text-align:center;padding:50px 80px;text-align: justify;">
-  <p>Scroll up and down to really get the feeling of how Parallax Scrolling works.</p>
+<div style="position:relative;height: 100%;text-align: center;padding: 0;">
+  <div class="thirdDivTop" style="color:#111;background-color:#aaa;padding: 0;">
+    <div style=" padding: 12px 80px;">
+       <h1 style="margin: 0;"><strong>Data Privacy</strong></h1>
+       <h3>Data privacy is of major concern to <strong>you</strong> as a consumer of these technologies. In order to output the most accurate result, the technology will need to access an increasing amount of private and personal data. 
+        <em><strong>You wouldn't let an unknown person access your private data would you?</strong></em>
+      <br><em><strong>As a user,</strong></em> you should read or research the privacy policy to ensure you know what data you might be giving up.
+      <br><em><strong>As an engineer,</strong></em> it is important to keep clear planning records. Consider if your project has confidential nature and ensure that project data is not accidently released.</h3>
+
+    </div>  
   </div>
+  <div class="thirdDivTop" style="color:#111;background-color:#ccc;padding: 0;">
+    <div style=" padding: 12px 80px;">
+      <h1 style="margin: 0;"><strong>Misuse</strong></h1>
+      <h3>Generative AI tools are effective at creating very realistic-looking images. This technology can be misused to mislead, manipulate, or promote fake news.
+        <br>Because of this, many social media platforms have systems to detect fake images. 
+        <br><em><strong>As a user,</strong></em> it is important to fact check information when using social media.
+        <br><em><strong>As an engineer,</strong></em> it is important to understand the limits of the technology beings used. For example, generative design for CAD must always be followed up with stress analysis to ensure the physical integrity of the part.
+      </h3>
+    </div>  
+    </div>
+    <div class="thirdDivTop" style="color:#111;background-color:#eee;padding: 0;">
+      <div style=" padding: 12px 80px;">
+        <h1 style="margin: 0;"><strong>Error & Bias</strong></h1>
+        <h3>AI can make mistakes just like humans. Because of this, it is important to double check the output of AI tools.
+          <br><em><strong>As a software engineer,</strong></em> biases can lead to unequal treatment of users and re-remphasize division, causing harm.
+        </h3>
+      </div>  
+      </div>
 </div>
 
+<!-- For example, <a href="https://www.forbes.com/sites/mollybohannon/2023/06/08/lawyer-used-chatgpt-in-court-and-cited-fake-cases-a-judge-is-considering-sanctions/">ChatGPT was found to cite non-existent law cases</a> when asked to create a court filing.
+In this instance, the lawyer mistook the output of ChatGPT for fact and created an erroneous filing. -->
 <div class="bgimg-1">
   <div class="caption">
-  <span class="border">COOL!</span>
+  <span class="border">Time for a real world example</span>
   </div>
 </div>
 
