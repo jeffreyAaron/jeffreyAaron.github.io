@@ -79,10 +79,10 @@
 }
 
 .appearOnHover:hover {
-    opacity: .8;
+    opacity: 0.2;
 }
 
 .appearOnHover {
-    opacity: 0;
-    transition: 0.3s;
+    opacity: 1;
+    transition: 1s;
 }

@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+
 <style>
 body, html {
   height: 100%;
@@ -16,7 +18,7 @@ body, html {
   color: #777;
 }
 
-.bgimg-1, .bgimg-2, .bgimg-3, .bgimg-4 {
+.bgimg-1, .bgimg-2, .bgimg-3, .bgimg-4, .bgimg-5 {
   position: relative;
   opacity: 0.65;
   background-attachment: fixed;
@@ -42,6 +44,12 @@ body, html {
 
 .bgimg-4 {
   background-image: url("lawCase.jpeg");
+  min-height: 100%;
+}
+
+.bgimg-5 {
+  /* background-image: url("lawCase.jpeg"); */
+  background-color: #000;
   min-height: 100%;
 }
 
@@ -103,7 +111,7 @@ p {
 
 .thirdDivTop {
     margin: 0px;
-    height: 33.33%;
+    min-height: 33.33%;
     width: 100%;
     text-align: left;
 }
@@ -155,7 +163,7 @@ p {
     <div class="thirdDiv" style="background-color: #bbb;">
       <div style="padding: 24px;">
         <h2>2.</h2>
-        <h3><strong>Virtue Ethics</strong></h3>
+        <h3><strong>Virtue Ethics (variation of Deontological Ethics)</strong></h3>
         <p>The <strong>character</strong> of a person is most important. Similarly to Deontological ethics, this is hard to quantify and therefore not effective to apply to AI ethical issues.</p>
 
       </div>
@@ -165,10 +173,11 @@ p {
         <h2>3.</h2>
         <h3><strong>Utilitarian Ethics</strong></h3>
       <p>This is the ethics of <strong>consequences</strong>. It calculates the positive and negative effects of the outcomes towards people and then assigns a total value to determine its nature. All innovations will come with certain downsides, but this method will allow us to determine if those downsides are worth the potential benefits for society. Most importantly, it ensure that we are not hurting society.</p>
-      </div>
+    <!-- <h1>▲</h1>   -->
+    </div>
     </div>
   </div>
-  <h2 style="text-align:center;"><br><br>Now let's look at an example.</h2>
+  <h2 style="text-align:center;"><br><br><br>Now let's look at an example.</h2>
 </div>
 
 <div class="bgimg-2">
@@ -182,8 +191,8 @@ p {
   <h2>Let's visit a modern version of the classic trolley problem.</h2>
   <h3>Scenario: A self-driving car is approaching a group of pedestrians. It is moving too fast to come to a stop. <br>The car has two options:</h3>
   <ol>
-    <li><h3>Maintain course and hit 5 pedestrians.</h3></li>
-    <li><h3>Swerve and only hit one pedestrian. Potential damage to the car.</h3></li>
+    <li><h3>Maintain course, hit and kill five pedestrians. The car and all passengers remain fine.</h3></li>
+    <li><h3>Swerve and only hit and kill one pedestrian. Passengers are injured. Damage to the car.</h3></li>
   </ol>
   <br>
   <h2>Which one would you choose?</h2>
@@ -201,13 +210,49 @@ p {
   </div>
 </div>
 
-<div class="bgimg-3">
+<div class="bgimg-5">
   <div class="caption">
-  <span class="border">Potential Risks of AI</span>
+  <span class="border">Wait, but how do we know which option is <strong><em>right</em></strong>?</span>
   </div>
 </div>
 
-<div style="position:relative;height: 100%;text-align: center;padding: 0;">
+<div style="color: #777;background-color:white;text-align:center;padding:50px 80px; min-height: 100%;">
+  <h2>This question is so complex that two researchers have called it "An Eternal Ethical Dilemma" [SOURCE HERE].</h2>
+  <!-- https://pmc.ncbi.nlm.nih.gov/articles/PMC8391290/#sec8-ijerph-18-08565 -->
+  <h3>It seems issue of choosing between these ethical principles is an ethical dilemma on its own.</h3>
+  <div style="margin: 0;text-align: left;pad: 0px 10%;">
+    <h2>Reconcilation of the Two</h2>
+    <h3>Comparing the Two</h3>
+     <div style="padding: 0px 10%; height: 300px;">
+    <div style="float:left; display: block; width: 50%; height: 100%; background-color: #bbb;">
+      <div style="padding: 32px;">
+        <h3><strong>Let's say we follow Utilitarian ethics.</strong></h3>
+      <p ><br>Choosing option 1 would be against the values, but this options shows a sense of duty, the duty of keeping the passengers safe.</p>
+      </div>
+    </div>
+    <div style="float:left; display: block; width: 50%; height: 100%; background-color: #ccc">
+      <div style="padding: 32px;">
+        <h3><strong>Let's say we follow Deontological ethics.</strong></h3>
+        <p><br>Choosing option 2 would mean leaving your duty, but it has the potential to save more lives.</p>
+        </div>
+    </div>
+    <h3>
+      <span style="opacity: 0;">.</span><br><br>
+    While there is no universally correct solution to the Trolley Problem[source], in the context of machine learning and AI (specifically self-driving cars), it seems that we are trending towards chosing a utilitarian approach[]. 
+    This aims to reduce harm to people. Artificial intelligence algorithms, at their current state, can't morally reason if an action is right or wrong[]. Instead they are designed to make ethical desicions. Because of the lack of morals, utilitariansm must be implemented for AI to act ethically.
+    <!-- https://www.linkedin.com/pulse/can-ai-determine-morality-intelliverse-ai-lab-flctf#:~:text=Presently%2C%20most%20AI%20systems%20also,to%20emulate%20such%20a%20response. -->
+    </h3>
+  </div>
+  </div>
+</div>
+
+<div class="bgimg-3">
+  <div class="caption">
+  <span class="border">Let's look at some risks of AI</span>
+  </div>
+</div>
+
+<div style="position:relative;min-height: 100%;text-align: center;padding: 0;">
   <div class="thirdDivTop" style="color:#111;background-color:#aaa;padding: 0;">
     <div style=" padding: 12px 80px;">
        <h1 style="margin: 0;"><strong>Data Privacy</strong></h1>
@@ -262,6 +307,8 @@ In this instance, the lawyer mistook the output of ChatGPT for fact and created 
     <p>- By potentially telling ChatGPT details about the court case, the lawyer might have leaked sensitive details. <br>- You can't be certain what data is stored after talking to a machine learning model!</p>
       <!-- https://www.nature.com/articles/d41586-024-03940-y -->
     </p>
+
+    <h1>ANALYZE USING UTILITARIAN AND Deontological approach</h1>
   </div>
 </div>
 
