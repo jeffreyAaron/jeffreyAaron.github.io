@@ -1,12 +1,13 @@
 #homeEntranceContent {
    
-    background-image: url("assets/home/background-01.svg");
+    background-image: url(assets/home/background-01.svg);
     background-size: cover;
     background-color: #222;
     width: 100%;
     height: 100vh;
     color: white;
 }
+
 
 #homeEntranceContent h1 {
     font-size: 60px;
@@ -30,10 +31,23 @@
     font-weight: 300;
 }
 
+@media only screen and (max-width: 620px) {
+    #homeEntranceContent h1 {
+        font-size: 32px;
+    }
+}
+
+@media only screen and (max-width: 620px) {
+    #homeEntranceContent h2 {
+        font-size: 20px;
+        font-weight: 300;
+    }
+}
+
 #homeWelcomeContent {
     margin-right: 15%;
     margin-left: 15%;
-    margin-top: 10%;
+    margin-top: 5%;
     margin-bottom: 10%;
 }
 
@@ -42,10 +56,23 @@
     width: 50%;
 }
 
+@media only screen and (max-width: 620px) {
+    /* For mobile phones: */
+    .flexDisplayInPartsVertically{
+        width: 100%;
+    }
+}
+
 #homeInterestsList li {
     font-size: 30px;
     font-weight: 400;
     opacity: 100%;
+}
+
+@media only screen and (max-width: 620px) {
+    #homeInterestsList {
+        display: none;
+    }
 }
 
 #homeInterestsList li:hover {
@@ -68,6 +95,15 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    float: right;
+}
+
+@media only screen and (max-width: 620px) {
+    /* For mobile phones: */
+    #homeInterestsSection{
+        
+        float: none;
+    }
 }
 
 .homeInterestsInfo {
@@ -85,4 +121,13 @@
 .appearOnHover {
     opacity: 1;
     transition: 1s;
+}
+
+.homeBounce {
+    transform: scale(1, 1);
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.homeBounce:hover {
+    transform: scale(1.15, 1.15);
 }
