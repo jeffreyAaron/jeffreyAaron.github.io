@@ -114,13 +114,13 @@
     transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-.appearOnHover:hover {
+.hideOnHover:hover {
     opacity: 0.2;
 }
 
-.appearOnHover {
+.hideOnHover {
     opacity: 1;
-    transition: 1s;
+    transition: .5s;
 }
 
 .homeBounce {
