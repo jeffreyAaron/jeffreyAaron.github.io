@@ -1,7 +1,13 @@
 // Content Data
 
 let data = []
-
+data.push({
+    title: "TFT Display Driver for Wearables",
+    organization: "Personal Project",
+    img: "kicadWatchPCB.png",
+    href: "project_pages/kicadWatchPCB.html",
+    externalLink: false
+})
 data.push({
     title: "Computer Vision Research",
     organization: "",
@@ -12,14 +18,14 @@ data.push({
 data.push({
     title: "Boat Telemetry Network and Dashboard",
     organization: "Arcadia Applied Engineering Team",
-    img: "boatTelemetrySystemImage.jpg",
+    img: "project_pages/boatTelemetrySystemImages/map.png",
     href: "project_pages/boatTelemetrySystemProject.html",
     externalLink: false
 });
 data.push({
     title: "Arcadia High Mobile App",
     organization: "Arcadia App Development Team",
-    img: "arcadiaHighMobileApp.jpeg",
+    img: "appDevBanner.png",
     href: "https://get.ahs.app",
     externalLink: true
 });
@@ -30,13 +36,13 @@ data.push({
     href: "project_pages/appDevNFCReader.html",
     externalLink: false
 });
-data.push({
-    title: "Fusion 360 Car",
-    organization: "",
-    img: "carProject.PNG",
-    href: "project_pages/carProject.html",
-    externalLink: false
-});
+// data.push({
+//     title: "Fusion 360 Car",
+//     organization: "",
+//     img: "carProject.PNG",
+//     href: "project_pages/carProject.html",
+//     externalLink: false
+// });
 data.push({
     title: "Differential Drive Robot",
     organization: "Arcadia Science Olympiad",
@@ -51,13 +57,13 @@ data.push({
     href: "project_pages/miniWatch.html",
     externalLink: false
 });
-data.push({
-    title: "Inventor Car",
-    organization: "Personal Project",
-    img: "carFrameRendered.bmp",
-    href: "project_pages/carFrame.html",
-    externalLink: false
-});
+// data.push({
+//     title: "Inventor Car",
+//     organization: "Personal Project",
+//     img: "carFrameRendered.bmp",
+//     href: "project_pages/carFrame.html",
+//     externalLink: false
+// });
 // data.push({
 //     title: "Boat Telej",
 //     organization: "",

@@ -44,10 +44,32 @@ nav {
     font-weight: 400;
     opacity: 100%;
     transition: opacity 0.5s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .logo:hover {
     opacity: 50%;
+}
+
+.navbar-logo {
+    height: 24px;
+    width: auto;
+    filter: brightness(0) invert(1); /* Makes the logo fully white */
+    transition: opacity 0.5s ease;
+    border: none !important;
+    border-radius: 0 !important;
+    background: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+    overflow: visible !important;
+}
+
+.logo:hover .navbar-logo {
+    opacity: 0.5;
 }
 
 .navbarButtonRight {
@@ -78,5 +100,17 @@ nav {
     position: relative;
     overflow: hidden;
     border-radius: 50%;
-  }
+}
+
+/* Responsive design for logo */
+@media only screen and (max-width: 620px) {
+    .navbar-logo {
+        height: 20px;
+    }
+    
+    .logo {
+        gap: 6px;
+        font-size: 16px;
+    }
+}
   
