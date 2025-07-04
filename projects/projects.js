@@ -11,7 +11,7 @@ data.push({
 data.push({
     title: "Computer Vision Research",
     organization: "",
-    img: "projects/compterVisionResearch.png",
+    img: "projects/compterVisionResearch.jpg",
     href: "projects/project_pages/computerVisionResearchHS.html",
     externalLink: false
 });
@@ -46,7 +46,7 @@ data.push({
 data.push({
     title: "Differential Drive Robot",
     organization: "Arcadia Science Olympiad",
-    img: "projects/differentialRobot.png",
+    img: "projects/differentialRobot.jpg",
     href: "projects/project_pages/differentialDriveRobot.html",
     externalLink: false
 });
