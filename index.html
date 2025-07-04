@@ -13,13 +13,21 @@
     <link rel="manifest" href="favicon/site.webmanifest">
     <link rel="shortcut icon" href="favicon/favicon.ico">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
     <!-- CSS Files -->
     <link rel="stylesheet" href="mainStyle.css">
     <link rel="stylesheet" href="navbar.css">
     <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="projects/projects.css">
 
     <!-- JS Files -->
     <script src="index.js"></script>
+    <script src="projects/projects.js"></script>
     <title>Jeffrey Aaron Jeyasingh</title>
 </head>
 
@@ -32,11 +40,11 @@
                 <ul id="navbarList">
                     <li class="navbarButton logo animatedUnderline">
                         <img src="logo.png" alt="Logo" class="navbar-logo">
-                        <a href="../index.html">Jeffrey Aaron</a>
+                        <a href="./index.html">Jeffrey Aaron</a>
                     </li>
                     <div class="navbarButtonRight">
                         <!-- <li class="navbarButton animatedUnderline"><a>About</a></li> -->
-                        <li class="navbarButton animatedUnderline"><a href="projects/projects.html">Projects</a></li>
+                        <li class="navbarButton animatedUnderline"><a href="#projectsContent">Projects</a></li>
                         <!-- <li class="navbarButton animatedUnderline"><a>My Experience</a></li> -->
                     </div>
                 </ul>
@@ -47,42 +55,14 @@
                     <h1>Hello!<br>I'm Jeffrey.</h1>
                     <h2>Berkeley EECS '28</h2>
                     <ul id="homeInterestsList" class="removeListStyle">
-                        <li data-index="computerScience">Computer Science<p class="homeInterestsListLinkDirector"></p></li>
-                        <li data-index="engineering">Engineering<p class="homeInterestsListLinkDirector"></p></li>
+                        <li data-index="computerScience">Machine Learning<p class="homeInterestsListLinkDirector"></p></li>
+                        <li data-index="engineering">& Robotics<p class="homeInterestsListLinkDirector"></p></li>
                         <!-- <li data-index="chemistry">chemistry<p class="homeInterestsListLinkDirector"></p></li> -->
                     </ul>
                 </div>
                 <div id="homeInterestsSection" class="flexDisplayInPartsVertically homeBounce">
-                    <!-- <div style="margin: 0;position: relative;top: 0;left: 0;">
-                        <img style="position: relative;
-                        top: 0;
-                        left: 0;" src="carOpen.png" alt="">
-                        <a href="projects/projects.html"><img class="appearOnHover" style="position: absolute;
-                            top: 0;
-                            left: 0;" src="carFront1.png" alt=""></a>
-
-                    </div> -->
-                    <div>
-                    <p class="navbarButton animatedUnderline" style="margin: 0;"><a href="projects/projects.html">See some of my projects! -></a></p>
-                    <a href="projects/projects.html">
-                        <div style="background-image: url(carOpen.png); margin: 0; background-size: cover; border-radius: 10px;">
-                            <img class="hideOnHover" style="border-radius: 10px; aspect-ratio: 1 / 1; width: 100%;" src="carFront.png" alt="">
-                        </div>
-                    </a>
-                    </div>
-                     <!-- <div id="imgHolder"></div> -->
-                    <!-- <div class="homeInterestsInfo" data-index="computerScience">
-                        <h3>Computer Science</h3>
-                        <p>Hey There, I like computer science<br>Hey There, I like computer science <br> Still WIP</p>
-                    </div>
-                    <div class="homeInterestsInfo" data-index="engineering">
-                        <h3>Engineering</h3>
-                        <p>Hey There, I like engineering<br>Hey There, I like engineering <br> Still WIP</p>
-                    </div>
-                    <div class="homeInterestsInfo" data-index="chemistry">
-                        <h3>Chemistry</h3>
-                        <p>Hey There, I like chemistry<br>Hey There, I like chemistry</p>
-                    </div> -->
+                    <h3>Welcome</h3>
+                    <div class="homeCarText">I am a student at UC Berkeley studying Electrical Engineering and Computer Science. I am interested in machine learning and robotics.</div>
                 </div>
             </div>
         </div>
@@ -159,6 +139,37 @@
                 <br>
                 <br>
             </p>
+        </div>
+    </div>
+    <!-- Scroll Down Arrow -->
+    <div class="scroll-down-arrow" onclick="document.getElementById('projectsContent').scrollIntoView({behavior: 'smooth'})">
+        <p class="arrow-text" >See my projects!</p>
+        <div class="arrow-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 10L12 15L17 10" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+    </div>
+    <!-- Projects Section (from projects.html) -->
+    <div id="projectsContent" class="cardContainer">
+        <!-- <div class="cardRow">
+            <div class="card animatedUnderline">
+                <div class="cardContent mouse-cursor-gradient-tracking">
+                    <img class="cardImage" src="IMG_1633.jpg"/>
+                    <h1><a href="project_pages/boatTelemetrySystemProject.html">Boat Telemetry System</a></h1>
+                    <p><small>Applied Engineering</small></p>
+                </div>
+            </div> -->
+            <!-- <div class="card">
+                <div class="cardContent mouse-cursor-gradient-tracking">
+                    <h1>Hey There!</h1>
+                </div>
+            </div>
+            <div class="card">
+                <div class="cardContent mouse-cursor-gradient-tracking">
+                    <h1>Hey There!</h1>
+                </div>
+            </div> -->
         </div>
     </div>
 </body>

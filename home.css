@@ -1,8 +1,9 @@
 #homeEntranceContent {
    
-    background-image: url(assets/home/background-01.svg);
+    background-image: /*linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),*/ url(assets/home/background-01.svg);
     background-size: cover;
-    background-color: #222;
+    background-color: #fff;
+    background-attachment: fixed;
     width: 100%;
     height: 100vh;
     color: white;
@@ -49,6 +50,8 @@
     margin-left: 15%;
     margin-top: 5%;
     margin-bottom: 10%;
+    display: flex;
+    align-items: center;
 }
 
 .flexDisplayInPartsVertically {
@@ -95,7 +98,23 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-    float: right;
+    justify-content: center;
+    align-items: center;
+}
+
+#homeInterestsSection h3 {
+    font-size: 24px;
+    font-weight: 400;
+    margin: 0 0 16px 0;
+    color: white;
+    text-align: left;
+}
+
+.homeCarText {
+    font-size: 18px;
+    color: white;
+    opacity: 0.9;
+    text-align: left;
 }
 
 @media only screen and (max-width: 620px) {
@@ -130,4 +149,51 @@
 
 .homeBounce:hover {
     transform: scale(1.15, 1.15);
+}
+
+/* Scroll Down Arrow Styles */
+.scroll-down-arrow {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.arrow-text {
+    color: white;
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0 0 8px 0;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.arrow-icon {
+    display: inline-block;
+    transition: transform 0.3s ease;
+    animation: bounce 2s infinite;
+}
+
+.arrow-icon:hover {
+    transform: translateY(5px);
+    animation: none;
+}
+
+.scroll-down-arrow:hover .arrow-text {
+    opacity: 1;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
 }

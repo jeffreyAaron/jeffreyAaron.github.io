@@ -4,71 +4,71 @@ let data = []
 data.push({
     title: "TFT Display Driver for Wearables",
     organization: "Personal Project",
-    img: "kicadWatchPCB.png",
-    href: "project_pages/kicadWatchPCB.html",
+    img: "projects/kicadWatchPCB.png",
+    href: "projects/project_pages/kicadWatchPCB.html",
     externalLink: false
 })
 data.push({
     title: "Computer Vision Research",
     organization: "",
-    img: "compterVisionResearch.png",
-    href: "project_pages/computerVisionResearchHS.html",
+    img: "projects/compterVisionResearch.png",
+    href: "projects/project_pages/computerVisionResearchHS.html",
     externalLink: false
 });
 data.push({
     title: "Boat Telemetry Network and Dashboard",
     organization: "Arcadia Applied Engineering Team",
-    img: "project_pages/boatTelemetrySystemImages/map.png",
-    href: "project_pages/boatTelemetrySystemProject.html",
+    img: "projects/project_pages/boatTelemetrySystemImages/map.png",
+    href: "projects/project_pages/boatTelemetrySystemProject.html",
     externalLink: false
 });
 data.push({
     title: "Arcadia High Mobile App",
     organization: "Arcadia App Development Team",
-    img: "appDevBanner.png",
+    img: "projects/appDevBanner.png",
     href: "https://get.ahs.app",
     externalLink: true
 });
 data.push({
     title: "Arcadia High Virtual Student ID",
     organization: "Arcadia App Development Team",
-    img: "appDevNFCReaderImage.jpg",
-    href: "project_pages/appDevNFCReader.html",
+    img: "projects/appDevNFCReaderImage.jpg",
+    href: "projects/project_pages/appDevNFCReader.html",
     externalLink: false
 });
 // data.push({
 //     title: "Fusion 360 Car",
 //     organization: "",
-//     img: "carProject.PNG",
-//     href: "project_pages/carProject.html",
+//     img: "projects/carProject.PNG",
+//     href: "projects/project_pages/carProject.html",
 //     externalLink: false
 // });
 data.push({
     title: "Differential Drive Robot",
     organization: "Arcadia Science Olympiad",
-    img: "differentialRobot.png",
-    href: "project_pages/differentialDriveRobot.html",
+    img: "projects/differentialRobot.png",
+    href: "projects/project_pages/differentialDriveRobot.html",
     externalLink: false
 });
 data.push({
     title: "Mini Watch",
     organization: "Personal Project",
-    img: "miniWatch.jpg",
-    href: "project_pages/miniWatch.html",
+    img: "projects/miniWatch.jpg",
+    href: "projects/project_pages/miniWatch.html",
     externalLink: false
 });
 // data.push({
 //     title: "Inventor Car",
 //     organization: "Personal Project",
-//     img: "carFrameRendered.bmp",
-//     href: "project_pages/carFrame.html",
+//     img: "projects/carFrameRendered.bmp",
+//     href: "projects/project_pages/carFrame.html",
 //     externalLink: false
 // });
 // data.push({
 //     title: "Boat Telej",
 //     organization: "",
-//     img: "boatTelemetrySystemImage.jpg",
-//     href: "project_pages/boatTelemetrySystemProject.html"
+//     img: "projects/boatTelemetrySystemImage.jpg",
+//     href: "projects/project_pages/boatTelemetrySystemProject.html"
 // });
 
 
