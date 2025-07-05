@@ -27,6 +27,7 @@
     display: block;
     color: #000;
     transition: 0.3s box-shadow, 0.3s background-color;
+    cursor: pointer;
 }
 
 .cardImage {
@@ -39,4 +40,12 @@
     background-color: #eee;
     border: #666;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.5);
+}
+
+.cardDate {
+    font-weight: 300;
+    font-size: 0.95em;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+    color: #444;
 }
