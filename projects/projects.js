@@ -1,22 +1,22 @@
 // Content Data
 
 let data = []
-data.push({
-    title: "3D Gaussian Splatting",
-    organization: "Implemented the paper \"3D Gaussian Splatting for Real-Time Radiance Field Rendering\"",
-    img: "projects/3dgsProject.gif",
-    href: "projects/project_pages/3dgsProject.html",
-    externalLink: false,
-    date: "June 2025"
-})
-data.push({
-    title: "TFT Display Driver for Wearables",
-    organization: "Personal Project",
-    img: "projects/kicadWatchPCB.png",
-    href: "projects/project_pages/kicadWatchPCB.html",
-    externalLink: false,
-    date: "May 2025"
-})
+// data.push({
+//     title: "3D Gaussian Splatting",
+//     organization: "Implemented the paper \"3D Gaussian Splatting for Real-Time Radiance Field Rendering\"",
+//     img: "projects/3dgsProject.gif",
+//     href: "projects/project_pages/3dgsProject.html",
+//     externalLink: false,
+//     date: "June 2025"
+// })
+// data.push({
+//     title: "TFT Display Driver for Wearables",
+//     organization: "Personal Project",
+//     img: "projects/kicadWatchPCB.png",
+//     href: "projects/project_pages/kicadWatchPCB.html",
+//     externalLink: false,
+//     date: "May 2025"
+// })
 data.push({
     title: "Computer Vision Research",
     organization: "Built upon NVIDIA's \"End to End Learning for Self-Driving Cars\"",
