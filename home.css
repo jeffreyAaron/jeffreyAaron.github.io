@@ -12,6 +12,7 @@
 @media only screen and (max-width: 620px) {
     #homeEntranceContent {
         height: auto;
+        background-position: center;
         padding-bottom: 32px;
     }
     #homeContent {
