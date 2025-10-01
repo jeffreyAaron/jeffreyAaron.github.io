@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Theme - Jeffrey Aaron Jeyasingh</title>
+    <!-- Google Fonts: Barlow -->
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Barlow', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #F2F2E9;
+            color: #222;
+        }
+        .container {
+            max-width: 600px;
+            margin: 80px auto;
+            padding: 32px;
+            text-align: center;
+        }
+        h1 {
+            font-family: 'Barlow', sans-serif;
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 0.5em;
+        }
+        h2 {
+            font-family: 'Barlow', sans-serif;
+            font-weight: 400;
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 1.5em;
+        }
+        p {
+            font-family: 'Barlow', sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        .navbar-svg-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: transparent;
+            margin-top: 0;
+            margin-bottom: 4px;
+            position: relative;
+        }
+        .navbar-svg {
+            width: 100%;
+            max-width: 100vw;
+            height: auto;
+            display: block;
+        }
+        .test-navbar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+        .test-navbar-list {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 0 40px;
+            pointer-events: auto;
+        }
+        .test-navbar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .test-navbar-logo-img {
+            height: 36px;
+            width: 36px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+        }
+        .test-navbar-link a, .test-navbar-logo a {
+            text-decoration: none;
+            color: #fff;
+            font-family: 'Barlow', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: color 0.2s;
+        }
+        .test-navbar-link a:hover {
+            color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar-svg-container">
+        <img src="topbar.svg" alt="Navbar" class="navbar-svg" />
+        <nav class="test-navbar">
+            <ul class="test-navbar-list">
+                <li class="test-navbar-logo">
+                    <img src="logo.png" alt="Logo" class="test-navbar-logo-img">
+                    <a href="./index_test.html">Jeffrey Aaron</a>
+                </li>
+                <li class="test-navbar-link"><a href="#projectsContent">Projects</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="container">
+        <h1>Hello! I'm Jeffrey.</h1>
+        <h2>Welcome to my homepage test theme.</h2>
+        <p>This is a simple page to test new font and style ideas.<br>More content and theme details coming soon.</p>
+    </div>
+</body>
+</html> 

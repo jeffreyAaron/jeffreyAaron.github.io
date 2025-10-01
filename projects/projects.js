@@ -1,14 +1,14 @@
 // Content Data
 
 let data = []
-// data.push({
-//     title: "3D Gaussian Splatting",
-//     organization: "Implemented the paper \"3D Gaussian Splatting for Real-Time Radiance Field Rendering\"",
-//     img: "projects/3dgsProject.gif",
-//     href: "projects/project_pages/3dgsProject.html",
-//     externalLink: false,
-//     date: "June 2025"
-// })
+data.push({
+    title: "3D Gaussian Splatting",
+    organization: "Implemented the paper \"3D Gaussian Splatting for Real-Time Radiance Field Rendering\"",
+    img: "projects/3dgsProject.gif",
+    href: "projects/project_pages/3dgsProject.html",
+    externalLink: false,
+    date: "Summer 2025"
+})
 // data.push({
 //     title: "TFT Display Driver for Wearables",
 //     organization: "Personal Project",
@@ -17,6 +17,15 @@ let data = []
 //     externalLink: false,
 //     date: "May 2025"
 // })
+
+data.push({
+    title: "Boat Telemetry Network and Dashboard",
+    organization: "Arcadia Applied Engineering Team",
+    img: "projects/project_pages/boatTelemetrySystemImages/map.png",
+    href: "projects/project_pages/boatTelemetrySystemProject.html",
+    externalLink: false,
+    date: "Summer 2024"
+});
 data.push({
     title: "Computer Vision Research",
     organization: "Built upon NVIDIA's \"End to End Learning for Self-Driving Cars\"",
@@ -26,28 +35,20 @@ data.push({
     date: "Summer 2023"
 });
 data.push({
-    title: "Boat Telemetry Network and Dashboard",
-    organization: "Arcadia Applied Engineering Team",
-    img: "projects/project_pages/boatTelemetrySystemImages/map.png",
-    href: "projects/project_pages/boatTelemetrySystemProject.html",
-    externalLink: false,
-    date: "2020 - 2024"
-});
-data.push({
     title: "Arcadia High Mobile App",
-    organization: "Arcadia App Development Team",
+    organization: "Arcadia High Mobile",
     img: "projects/appDevBanner.png",
     href: "https://get.ahs.app",
     externalLink: true,
-    date: "2022"
+    date: "2023 - 2024"
 });
 data.push({
     title: "Arcadia High Virtual Student ID",
-    organization: "Arcadia App Development Team",
+    organization: "Arcadia High Mobile",
     img: "projects/mini/appDevNFCReaderImageMini.jpg",
     href: "projects/project_pages/appDevNFCReader.html",
     externalLink: false,
-    date: "2022"
+    date: "Fall 2022"
 });
 // data.push({
 //     title: "Fusion 360 Car",
@@ -62,11 +63,11 @@ data.push({
     img: "projects/mini/differentialRobotMini.jpg",
     href: "projects/project_pages/differentialDriveRobot.html",
     externalLink: false,
-    date: "2021"
+    date: "Spring 2024"
 });
 data.push({
     title: "Mini Watch",
-    organization: "Personal Project",
+    organization: "Assembled and programmed the hardware and software for a mini watch",
     img: "projects/miniWatch.jpg",
     href: "projects/project_pages/miniWatch.html",
     externalLink: false,
