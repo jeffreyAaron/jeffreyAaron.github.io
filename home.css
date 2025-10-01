@@ -252,7 +252,7 @@
 
 .timeline-item {
     /* position: relative; */
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     opacity: 0;
     transform: translateX(-20px);
     animation: slideInFromLeft 0.6s ease forwards;
@@ -266,7 +266,7 @@
 
 .timeline-content {
     background: rgba(255, 255, 255, 0.1);
-    padding: 20px;
+    padding: 10px;
     border-radius: 8px;
     border-left: 4px solid rgba(255, 255, 255, 0.5);
     transition: all 0.3s ease;
