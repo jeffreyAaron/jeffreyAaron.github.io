@@ -81,7 +81,10 @@ function getCardTemplate(title, organization, img, href, externalLink, date, lan
 
     return `
     <div class="gh-card" onclick="onClick('${href}')">
-        <img class="gh-card-image" src="${img}" alt="${title}" loading="lazy"/>
+        <div class="gh-card-image-wrapper">
+            <div class="gh-card-image-bg" style="background-image: url('${img}');"></div>
+            <img class="gh-card-image" src="${img}" alt="${title}" loading="lazy"/>
+        </div>
         <div class="gh-card-body">
             <div class="gh-card-header">
                 <span class="gh-card-title">${title}</span>
@@ -105,10 +108,10 @@ function getCardTemplate(title, organization, img, href, externalLink, date, lan
 
 var projectsContent;
 
-window.onload = () => {
+document.addEventListener("DOMContentLoaded", () => {
     projectsContent = document.getElementById("projectsContent");
     generateContent();
-}
+});
 
 function onClick(link) {
     for (let index = 0; index < data.length; index += 1) {

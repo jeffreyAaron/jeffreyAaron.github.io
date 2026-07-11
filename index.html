@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,153 +15,59 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 
-    <!-- CSS Files -->
+    <!-- CSS -->
     <link rel="stylesheet" href="mainStyle.css">
-    <link rel="stylesheet" href="navbar.css">
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="projects/projects.css">
 
-    <!-- JS Files -->
-    <script src="index.js"></script>
-    <script src="projects/projects.js"></script>
-    <title>Jeffrey Aaron Jeyasingh</title>
+    <!-- JS -->
+    <script src="projects/projects.js" defer></script>
+
+    <title>Jeffrey Aaron</title>
 </head>
 
 <body>
-    <!-- Content that is displayed in front of the full screen gradient on the home page -->
-    <div id="homeContent" class="mainContent">
-        <div id="homeEntranceContent">
-            <!-- Navbar -->
-            <nav>
-                <ul id="navbarList">
-                    <li class="navbarButton logo animatedUnderline">
-                        <img src="logo.png" alt="Logo" class="navbar-logo">
-                        <a href="./index.html">Jeffrey Aaron</a>
-                    </li>
-                    <div class="navbarButtonRight">
-                        <!-- <li class="navbarButton animatedUnderline"><a>About</a></li> -->
-                        <li class="navbarButton animatedUnderline"><a href="#projectsContent">Projects</a></li>
-                        <!-- <li class="navbarButton animatedUnderline"><a>My Experience</a></li> -->
-                    </div>
-                </ul>
-            </nav>
-            <!-- Home Welcome Content -->
-            <div id="homeWelcomeContent">
-                <div class="flexDisplayInPartsVertically homeBounceText">
-                    <h1>Hello!<br>I'm Jeffrey.</h1>
-                    <h2>Berkeley EECS</h2>
-                    <ul id="homeInterestsList" class="removeListStyle">
-                        <li data-index="computerScience">SWE<p class="homeInterestsListLinkDirector"></p></li>
-                        <li data-index="computerScience">Mobile Dev<p class="homeInterestsListLinkDirector"></p></li>
-                        <li data-index="engineering">& Machine Learning<p class="homeInterestsListLinkDirector"></p></li>
-                        <!-- <li data-index="chemistry">chemistry<p class="homeInterestsListLinkDirector"></p></li> -->
-                    </ul>
-                </div>
-                <div id="homeInterestsSection" class="flexDisplayInPartsVertically">
-                    <div>
-                        <p class="navbarButton animatedUnderline" style="margin: 0;"><a href="#projectsContent">See some of my projects! -></a></p>
-                        <a href="#projectsContent">
-                            <div style="background-image: url(carOpen.png); margin: 0; background-size: cover; border-radius: 10px;">
-                                <img class="hideOnHover" style="border-radius: 10px; aspect-ratio: 1 / 1; width: 100%;" src="carFront.png" alt="">
-                            </div>
-                            <!-- <div style="margin: 0; background-size: cover; border-radius: 10px;">
-                                <img style="border-radius: 10px; aspect-ratio: 1 / 1; width: 100%;" src="projects/gaussianSplattingNumbered.gif" alt="">
-                            </div> -->
-                        </a>
-                    </div>
+    <!-- Navbar -->
+    <nav class="top-nav">
+        <div class="nav-links-box">
+            <a href="JeffreyAaronResume.pdf" target="_blank" class="nav-link">Resume</a>
+            <a href="#" class="nav-link">Slides</a>
+        </div>
+    </nav>
+
+    <!-- Main layout: sidebar + project grid -->
+    <div class="main-layout">
+
+        <!-- Left sidebar -->
+        <aside class="left-sidebar">
+
+            <!-- Name card with gradient accent -->
+            <div class="name-card-wrapper">
+                <div class="name-card-accent"></div>
+                <div class="name-card">
+                    <h1 class="name-heading">Jeffrey Aaron</h1>
+                    <p class="name-sub">Berkeley EECS</p>
+                    <p class="name-sub">ML &amp; Robotics</p>
                 </div>
             </div>
-        </div>
-        <div>
-            <!-- Secondary Header -->
-            <div class="dark">
-                <!-- <h2>Projects I'm Working On Right Now</h2> -->
-                <!-- <img src="https://cdn.discordapp.com/attachments/832877050049724456/1249267361920319568/carimage.png?ex=6666ae65&is=66655ce5&hm=a8d220a981915691d0dbaa96c6fef349366b6b1153099dcaa348a9472a6be05a&" width="500px"> -->
+
+            <!-- About / bio box -->
+            <div class="about-box">
+                <p class="about-text">Hi! I'm Jeffrey, a junior at UC Berkeley studying EECS. I work at the intersection of software engineering, machine learning, and robotics.</p>
+                <div class="about-links">
+                    <a href="https://github.com/jeffreyAaron" target="_blank" class="about-link">GitHub</a>
+                    <a href="https://linkedin.com/in/jeffreyaaron06" target="_blank" class="about-link">LinkedIn</a>
+                </div>
             </div>
-            <!-- <p>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br> -->
-            </p>
-        </div>
+
+        </aside>
+
+        <!-- Projects grid (populated by projects.js) -->
+        <div id="projectsContent"></div>
+
     </div>
-    <!-- Scroll Down Arrow
-    <div class="scroll-down-arrow" onclick="document.getElementById('projectsContent').scrollIntoView({behavior: 'smooth'})">
-        <p class="arrow-text" >See my projects!</p>
-        <div class="arrow-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7 10L12 15L17 10" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </div>
-    </div> -->
-    <!-- Projects Section -->
-    <div id="projectsContent"></div>
 </body>
 
 </html>
