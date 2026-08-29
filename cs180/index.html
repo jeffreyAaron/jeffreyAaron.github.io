@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon/favicon-16x16.png">
+    <link rel="manifest" href="../favicon/site.webmanifest">
+    <link rel="shortcut icon" href="../favicon/favicon.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../mainStyle.css">
+    <link rel="stylesheet" href="../home.css">
+    <link rel="stylesheet" href="../projects/projects.css">
+
+    <!-- JS -->
+    <script src="cs180-data.js" defer></script>
+
+    <title>CS 180 Projects — Jeffrey Aaron</title>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="top-nav">
+        <div class="nav-links-box">
+            <a href="../index.html" class="nav-link">jeffreyaaron.dev</a>
+        </div>
+    </nav>
+
+    <!-- Main layout: sidebar + project grid -->
+    <div class="main-layout">
+
+        <!-- Left sidebar -->
+        <aside class="left-sidebar">
+
+            <!-- Name card with gradient accent -->
+            <div class="name-card-wrapper">
+                <div class="name-card-accent"></div>
+                <div class="name-card">
+                    <h1 class="name-heading">CS 180</h1>
+                    <p class="name-sub">UC Berkeley</p>
+                    <p class="name-sub">Computer Vision &amp; Computational Photography</p>
+                </div>
+            </div>
+
+            <!-- About / bio box -->
+            <div class="about-box">
+                <p class="about-text">Project write-ups for CS 180, built with the <a href="https://github.com/RomanHauksson/academic-project-astro-template" target="_blank">academic project page template</a>. Updated as the semester goes.</p>
+                <div class="about-links">
+                    <a href="../index.html" class="about-link">Back to jeffreyaaron.dev</a>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- Projects grid (populated by cs180-data.js) -->
+        <div id="projectsContent"></div>
+
+    </div>
+</body>
+
+</html>
