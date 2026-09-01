@@ -19,12 +19,14 @@ import Header from "./components/Header.astro";
 import HighlightedSection from "./components/HighlightedSection.astro";
 import Figure from "./components/Figure.astro";
 import Picture from "./components/Picture.astro";
+import Video from "./components/Video.astro";
 import TwoColumns from "./components/TwoColumns.astro";
 
 import dogsDiffc from "./assets/dogs-diffc.png";
 import dogsTrue from "./assets/dogs-true.png";
 import selfieClose from "./assets/part1-selfie-close.jpg";
 import selfieFar from "./assets/part1-selfie-far.jpg";
+import dollyZoom from "./assets/part3-dolly-zoom.mp4";
 
 {/*
   Assignment: https://cal-cs180.github.io/fa26/hw/proj0/index.html (due Tue Sep 1, 2026, 11:59 PM)
@@ -89,12 +91,8 @@ building change between the two shots.
 
 ## Part 3: Dolly zoom
 
-A sequence of stills taken while walking backward and zooming in simultaneously, keeping the
-subject roughly the same size throughout, combined into an animated GIF.
+Walking backward while zooming in, keeping the subject roughly the same size throughout.
 
-<Figure>
-  <Picture slot="figure" src={dogsTrue} alt="Dolly zoom sequence (replace with your GIF)" />
-  <Fragment slot="caption">Dolly zoom sequence — replace this with your combined GIF.</Fragment>
-</Figure>
+<Video src={dollyZoom} />
 
 Describe what's happening to the background relative to the subject as you dolly out and zoom in.
