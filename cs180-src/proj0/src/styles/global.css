@@ -122,10 +122,10 @@ main .katex-display {
   --warning-foreground: var(--color-amber-950);
   --error: var(--color-red-700);
   --error-foreground: var(--color-zinc-50);
-  --border: var(--color-zinc-200);
+  --border: var(--color-black);
   --input: var(--color-zinc-200);
   --outline: var(--color-zinc-400);
-  --radius: 0.625rem;
+  --radius: 0rem;
 }
 
 .dark {

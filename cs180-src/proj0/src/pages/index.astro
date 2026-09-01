@@ -21,7 +21,7 @@ const {
   description,
   favicon,
   thumbnail,
-  theme = "device",
+  theme = "light",
 } = frontmatter as Frontmatter;
 
 const baseUrl = import.meta.env.BASE_URL;
@@ -44,14 +44,14 @@ const prefix = baseUrl.endsWith("/") ? baseUrl : baseUrl + "/";
     {thumbnail && <meta property="og:image" content={prefix + thumbnail} />}
 
     <Font
-      cssVariable="--font-noto-sans"
+      cssVariable="--font-poppins"
       preload={[{ subset: "latin", style: "normal" }]}
     />
 
     <title>{title}</title>
   </head>
   <body
-    class="prose prose-lg prose-zinc dark:prose-invert prose-a:text-blue-600 prose-a:hover:text-blue-900 prose-a:dark:text-blue-200 prose-a:dark:hover:text-blue-100 prose-a:underline prose-a:decoration-dashed prose-a:underline-offset-4 prose-a:hover:decoration-solid prose-a:font-normal prose-code:bg-zinc-200 prose-code:dark:bg-zinc-800 prose-code:text-zinc-800 prose-code:dark:text-zinc-200 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-medium prose-code:before:content-none prose-code:after:content-none max-w-none pt-16 pb-6 font-(family-name:--font-noto-sans)"
+    class="prose prose-lg prose-zinc dark:prose-invert prose-headings:font-semibold prose-a:text-black prose-a:dark:text-white prose-a:underline prose-a:decoration-solid prose-a:underline-offset-4 prose-a:font-medium prose-a:hover:opacity-60 prose-code:bg-zinc-200 prose-code:dark:bg-zinc-800 prose-code:text-zinc-800 prose-code:dark:text-zinc-200 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-none prose-code:font-medium prose-code:before:content-none prose-code:after:content-none max-w-none pt-16 pb-6 font-(family-name:--font-poppins)"
   >
     <main>
       <Content components={{ table: Table }} />

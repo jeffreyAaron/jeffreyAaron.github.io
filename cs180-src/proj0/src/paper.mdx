@@ -5,7 +5,7 @@
 title: CS 180 Project 0
 
 # The color theme of the page. Defaults to "device" (the preference set in the user's browser or operating system). Setting this to "light" or "dark" will override the user's preference. This is useful if your figures only look good in one theme.
-theme: device
+theme: light
 
 # This is the icon that appears in the user's browser tab. To customize, change the favicon.svg file in /public/, or add your own file to /public/ and change the filename here.
 favicon: favicon.svg
@@ -23,6 +23,8 @@ import TwoColumns from "./components/TwoColumns.astro";
 
 import dogsDiffc from "./assets/dogs-diffc.png";
 import dogsTrue from "./assets/dogs-true.png";
+import selfieClose from "./assets/part1-selfie-close.jpg";
+import selfieFar from "./assets/part1-selfie-far.jpg";
 
 {/*
   Assignment: https://cal-cs180.github.io/fa26/hw/proj0/index.html (due Tue Sep 1, 2026, 11:59 PM)
@@ -46,9 +48,9 @@ import dogsTrue from "./assets/dogs-true.png";
     { name: "CS 180 Projects", url: "../", icon: "ri:arrow-left-line" },
     { name: "Code", url: "https://github.com/jeffreyAaron", icon: "ri:github-line" },
   ]}
->
-  <Picture slot="background" src={dogsTrue} alt="" priority />
-</Header>
+/>
+
+<Picture src={dogsTrue} alt="Lead photo for the project (replace with your own)" priority />
 
 <HighlightedSection>
 
@@ -65,8 +67,8 @@ A close-up selfie versus a portrait taken from farther away with zoom, keeping t
 the same size in frame.
 
 <TwoColumns>
-  <Picture slot="left" src={dogsDiffc} alt="Close-up selfie-style portrait" />
-  <Picture slot="right" src={dogsTrue} alt="Portrait taken from farther away, zoomed in" />
+  <Picture slot="left" src={selfieClose} alt="Close-up selfie-style portrait" />
+  <Picture slot="right" src={selfieFar} alt="Portrait taken from farther away, zoomed in" />
 </TwoColumns>
 
 Explain why the zoomed-in, farther-away shot looks better — what's happening to facial proportions

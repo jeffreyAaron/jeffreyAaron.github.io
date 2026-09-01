@@ -51,9 +51,10 @@ export default defineConfig({
   fonts: [
     {
       provider: fontProviders.google(),
-      name: "Noto Sans",
-      cssVariable: "--font-noto-sans",
-      weights: ["100 900"],
+      name: "Poppins",
+      cssVariable: "--font-poppins",
+      weights: ["300", "400", "500", "600", "700"],
+      styles: ["normal", "italic"],
     },
   ],
   image: {
