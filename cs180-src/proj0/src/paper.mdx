@@ -16,24 +16,23 @@ thumbnail: screenshot-light.png
 ---
 
 import Header from "./components/Header.astro";
-import HighlightedSection from "./components/HighlightedSection.astro";
 import Figure from "./components/Figure.astro";
 import Picture from "./components/Picture.astro";
 import Video from "./components/Video.astro";
 import TwoColumns from "./components/TwoColumns.astro";
 
-import dogsDiffc from "./assets/dogs-diffc.png";
-import dogsTrue from "./assets/dogs-true.png";
 import selfieClose from "./assets/part1-selfie-close.jpg";
 import selfieFar from "./assets/part1-selfie-far.jpg";
+import buildingZoomed from "./assets/part2-building-zoomed.jpg";
+import buildingClose from "./assets/part2-building-close.jpg";
 import dollyZoom from "./assets/part3-dolly-zoom.mp4";
+import dollyZoomPoster from "./assets/part3-dolly-zoom-poster.jpg";
 
 {/*
   Assignment: https://cal-cs180.github.io/fa26/hw/proj0/index.html (due Tue Sep 1, 2026, 11:59 PM)
 
-  Everything below is a placeholder — swap dogsDiffc/dogsTrue for your own photos in
-  src/assets/, and fill in the explanations. The three sections below map directly to the
-  three required parts of the assignment; don't remove any of them.
+  Fill in the explanations below each part. The three sections map directly to the three
+  required parts of the assignment; don't remove any of them.
 
   Duplicating this project for a new assignment instead? Copy this whole cs180-src/proj0
   folder, then update:
@@ -46,53 +45,36 @@ import dollyZoom from "./assets/part3-dolly-zoom.mp4";
   title="Project 0: Becoming Friends with Your Camera"
   conference="CS 180, UC Berkeley — Fall 2026"
   authors={[{ name: "Jeffrey Aaron", url: "https://jeffreyaaron.dev", institution: "UC Berkeley" }]}
-  links={[
-    { name: "CS 180 Projects", url: "../", icon: "ri:arrow-left-line" },
-    { name: "Code", url: "https://github.com/jeffreyAaron", icon: "ri:github-line" },
-  ]}
+  links={[{ name: "CS 180 Projects", url: "../", icon: "ri:arrow-left-line" }]}
 />
 
-<Picture src={dogsTrue} alt="Lead photo for the project (replace with your own)" priority />
-
-<HighlightedSection>
-
-## Overview
-
-This project is about building intuition for how perspective, focal length, zoom, and center of
-projection affect a photo — through three hands-on shooting exercises.
-
-</HighlightedSection>
-
 ## Part 1: Selfie comparison
-
-A close-up selfie versus a portrait taken from farther away with zoom, keeping the face roughly
-the same size in frame.
 
 <TwoColumns>
   <Picture slot="left" src={selfieClose} alt="Close-up selfie-style portrait" />
   <Picture slot="right" src={selfieFar} alt="Portrait taken from farther away, zoomed in" />
 </TwoColumns>
 
-Explain why the zoomed-in, farther-away shot looks better — what's happening to facial proportions
-as the camera gets closer.
+In the close up selfie, the edges of my face are distorted and stretched by the camera. 
+The nose and mouse is much closer to the camera and that appears much larger. This makes the faces look oval in space.
+By going farther away, the face is smoothed out by the noise from the increased distance and the face appears more flat.
 
 ## Part 2: Architectural perspective
 
-The same building photographed twice: once zoomed in from far away, once up close without zoom,
-keeping the building roughly the same size in frame both times.
-
 <TwoColumns>
-  <Picture slot="left" src={dogsDiffc} alt="Building photographed with zoom from far away" />
-  <Picture slot="right" src={dogsTrue} alt="Building photographed up close without zoom" />
+  <Picture slot="left" src={buildingZoomed} alt="Building photographed up close without zoom" />
+  <Picture slot="right" src={buildingClose} alt="Building photographed with zoom from far away" />
 </TwoColumns>
 
-Explain the compression/flattening effect — how the perceived depth and converging lines of the
-building change between the two shots.
+Similar to the image of the face, the close up photo without zoom (left) shows a lot of depth. The face of building has a larger skew from large to small as you go farther. 
+On the right however, with the zoom, it looks flat. This is because the camera is farther away and any changes in depth of the face of the building or the wall are less noticable to the camera.
 
 ## Part 3: Dolly zoom
 
-Walking backward while zooming in, keeping the subject roughly the same size throughout.
+<div class="print:hidden">
+  <Video src={dollyZoom} />
+</div>
+<div class="hidden print:block">
+  <Picture src={dollyZoomPoster} alt="First frame of the dolly zoom video" />
+</div>
 
-<Video src={dollyZoom} />
-
-Describe what's happening to the background relative to the subject as you dolly out and zoom in.
