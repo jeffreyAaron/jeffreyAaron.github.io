@@ -1,0 +1,184 @@
+---
+title: CS 180 Project 1
+theme: light
+favicon: favicon.svg
+description: CS 180 Project 1 — Colorizing the Prokudin-Gorskii Photo Collection
+thumbnail: screenshot-light.png
+---
+
+import Header from "./components/Header.astro";
+import Figure from "./components/Figure.astro";
+import Picture from "./components/Picture.astro";
+import { Comparison } from "./components/Comparison";
+
+import cathedralAligned from "./assets/cathedral-aligned.png";
+import cathedralUnaligned from "./assets/cathedral-unaligned.png";
+import monasteryAligned from "./assets/monastery-aligned.png";
+import tobolskAligned from "./assets/tobolsk-aligned.png";
+import cathedralNccAligned from "./assets/cathedral-ncc-aligned.png";
+import monasteryNccAligned from "./assets/monastery-ncc-aligned.png";
+import tobolskNccAligned from "./assets/tobolsk-ncc-aligned.png";
+
+import pyramidCathedral from "./assets/pyramid/cathedral.jpg";
+import pyramidChurch from "./assets/pyramid/church.jpg";
+import pyramidEmir from "./assets/pyramid/emir.jpg";
+import pyramidHarvesters from "./assets/pyramid/harvesters.jpg";
+import pyramidIcon from "./assets/pyramid/icon.jpg";
+import pyramidIlemselga from "./assets/pyramid/ilemselga.jpg";
+import pyramidMelons from "./assets/pyramid/melons.jpg";
+import pyramidMonastery from "./assets/pyramid/monastery.jpg";
+import pyramidReligousPainting from "./assets/pyramid/religous_painting.jpg";
+import pyramidSelfPortrait from "./assets/pyramid/self_portrait.jpg";
+import pyramidSiren from "./assets/pyramid/siren.jpg";
+import pyramidThreeGenerations from "./assets/pyramid/three_generations.jpg";
+import pyramidTobolsk from "./assets/pyramid/tobolsk.jpg";
+import pyramidWharf from "./assets/pyramid/wharf.jpg";
+import pyramidEtyudGolovki from "./assets/pyramid/etyud_golovki.jpg";
+import pyramidSamarkandStreet from "./assets/pyramid/samarkand_street.jpg";
+import pyramidVMalorossii from "./assets/pyramid/v_malorossii.jpg";
+import pyramidEmirFixed from "./assets/pyramid/emir-fixed.jpg";
+
+<Header
+  title="Project 1: Colorizing the Prokudin-Gorskii Photo Collection"
+  conference="CS 180, UC Berkeley — Fall 2026"
+  authors={[{ name: "Jeffrey Aaron", url: "https://jeffreyaaron.dev", institution: "UC Berkeley" }]}
+  links={[{ name: "CS 180 Projects", url: "../", icon: "ri:arrow-left-line" }]}
+/>
+
+## Single-scale alignment (Euclidean distance, Sum of Squared Differences)
+
+To implement single scale alignment, I wrote the align_single_scale function. First, I used a nested for loop to iterate through all possible shifts in x and y within the frameDim window of 15 pixels. To shift each image, I used the np.roll function. Then I ensured to crop the output of the roll and b (the target to align to) to account for the fact that after rolling, certain pixels will be cut off. The SSD function calculates similarity between the two images by summing the differences. This assumes that the point on the image in one color channel shares a similar brightness as on the other color channels. However, images are meant to be vibrant with color and this method can break down with very colorful images I predict.
+
+<div class="not-prose grid grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] gap-6">
+  <Figure>
+    <Picture slot="figure" src={cathedralAligned} alt="Cathedral, aligned with single-scale search" />
+    <span slot="caption">cathedral.jpg — g: (5, 2), r: (12, 3)</span>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={monasteryAligned} alt="Monastery, aligned with single-scale search" />
+    <span slot="caption">monastery.jpg — g: (-3, 2), r: (3, 2)</span>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={tobolskAligned} alt="Tobolsk, aligned with single-scale search" />
+    <span slot="caption">tobolsk.jpg — g: (3, 2), r: (6, 3)</span>
+  </Figure>
+</div>
+
+### Aligned vs. unaligned
+
+<Comparison client:visible changePositionOnHover>
+  <img slot="itemOne" src={cathedralAligned.src} alt="Aligned" />
+  <img slot="itemTwo" src={cathedralUnaligned.src} alt="Unaligned, channels stacked with no shift" />
+</Comparison>
+
+## Single-scale alignment with NCC
+
+Next, we try a new scoring function to rank the similarity between the color channel alignments. NCC first starts by normalizing the brightness of each image by subtracting the mean. Then we divide each by its own norm to make the range of values between -1 and 1. Finally, we take the dot product of the two color channels to get a measure of how different the two "vectors" are. Larger number = better correlation. To reduce the amount of code that I implemented, I edited the single_scale_alignment function to take in a scoreFunc param. This way, I can adjust the how the candidates are ranked. Because of this change, the NCC function must be negated because the single_scale_alignment function defaults to minimize the scoreFunc.
+
+<div class="not-prose grid grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] gap-6">
+  <Figure>
+    <Picture slot="figure" src={cathedralNccAligned} alt="Cathedral, aligned with NCC" />
+    <span slot="caption">cathedral.jpg — g: (5, 2), r: (12, 3)</span>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={monasteryNccAligned} alt="Monastery, aligned with NCC" />
+    <span slot="caption">monastery.jpg — g: (-3, 2), r: (3, 2)</span>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={tobolskNccAligned} alt="Tobolsk, aligned with NCC" />
+    <span slot="caption">tobolsk.jpg — g: (3, 2), r: (6, 3)</span>
+  </Figure>
+</div>
+
+## Multi-scale pyramid alignment
+
+After getting good results with single scaling alignment, I wanted to try a method that would work on larger images. The current single scaling aproach would be too compute intensive for the larger images. The search grid increased quadratically in time needed as we expand the grid. So to alleviate this issue, we can use an image pyramid to downscale the image. Then perform our previous single scale search on that smaller image. Then we undo the scaling and move to the next level. One thing that got me at first was forgetting the double the offset that the lower level found. This causes the image to drift slightly off from where it should be. Another issue I faced was that the 14 sammple images were different sizes. So instead of using a fixed number of levels, I made the image pyramid shrink the image dimension until the smallest dimension was under a set size. I also continued with good programming practices by adding a shift and crop helper function and allowing the align_pyramid function to take in a function for the finer single scale alignment. Because NCC performed a little better above, I chose to use that as my scoring function.
+
+### The 14 provided images
+
+<div class="not-prose grid grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] gap-6">
+  <Figure>
+    <Picture slot="figure" src={pyramidCathedral} alt="Cathedral, aligned with the pyramid" />
+    <span slot="caption">cathedral.jpg — g: (5, 2), r: (12, 3)</span>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={pyramidMonastery} alt="Monastery, aligned with the pyramid" />
+    <span slot="caption">monastery.jpg — g: (-3, 2), r: (3, 2)</span>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={pyramidTobolsk} alt="Tobolsk, aligned with the pyramid" />
+    <span slot="caption">tobolsk.jpg — g: (3, 3), r: (6, 3)</span>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={pyramidChurch} alt="Church, aligned with the pyramid" />
+    <span slot="caption">church.tif — g: (25, 4), r: (58, -4)</span>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={pyramidHarvesters} alt="Harvesters, aligned with the pyramid" />
+    <span slot="caption">harvesters.tif — g: (59, 16), r: (123, 13)</span>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={pyramidIcon} alt="Icon, aligned with the pyramid" />
+    <span slot="caption">icon.tif — g: (41, 17), r: (89, 23)</span>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={pyramidIlemselga} alt="Ilemselga, aligned with the pyramid" />
+    <span slot="caption">ilemselga.tif — g: (40, 7), r: (130, 11)</span>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={pyramidMelons} alt="Melons, aligned with the pyramid" />
+    <span slot="caption">melons.tif — g: (81, 10), r: (178, 13)</span>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={pyramidReligousPainting} alt="Religious painting, aligned with the pyramid" />
+    <span slot="caption">religous_painting.tif — g: (27, 3), r: (68, 7)</span>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={pyramidSelfPortrait} alt="Self portrait, aligned with the pyramid" />
+    <span slot="caption">self_portrait.tif — g: (78, 29), r: (176, 37)</span>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={pyramidSiren} alt="Siren, aligned with the pyramid" />
+    <span slot="caption">siren.tif — g: (49, -6), r: (95, -25)</span>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={pyramidThreeGenerations} alt="Three generations, aligned with the pyramid" />
+    <span slot="caption">three_generations.tif — g: (53, 14), r: (112, 11)</span>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={pyramidWharf} alt="Wharf, aligned with the pyramid" />
+    <span slot="caption">wharf.tif — g: (15, -7), r: (82, -16)</span>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={pyramidEmir} alt="Emir of Bukhara, alignment failed" />
+    <span slot="caption">emir.tif — g: (49, 24), r: (-130, -407) — failed</span>
+  </Figure>
+</div>
+
+emir.tif is the one image that failed to align (of 17). I think this is because of how color full the robe is. Each fully saturated color has a unique pattern in its respecive image channel. This makes it hard to align. I think it would be better to use some kind of edge detector. However, for this assignment, I was able to get away with only using the green channel as the anchor. I think this is because the background has more green and the other channels are able to aligne to the non colorful background better.
+
+### 3 of my own, from the Prokudin-Gorskii collection
+
+<div class="not-prose grid grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] gap-6">
+  <Figure>
+    <Picture slot="figure" src={pyramidEtyudGolovki} alt="Portrait, aligned with the pyramid" />
+    <span slot="caption">etyud_golovki.tif — g: (51, 9), r: (112, 11)</span>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={pyramidSamarkandStreet} alt="Street in old Samarkand, aligned with the pyramid" />
+    <span slot="caption">samarkand_street.tif — g: (67, 1), r: (140, -15)</span>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={pyramidVMalorossii} alt="Ukrainian peasant woman, aligned with the pyramid" />
+    <span slot="caption">v_malorossii.tif — g: (25, 3), r: (120, 4)</span>
+  </Figure>
+</div>
+
+## Fixing emir.tif by anchoring to the green channel
+
+emir.tif is the one image that fails when g and r are aligned to b, (as are the above images). The blue robe is so colorful that the blue channel correlates poorly with the other two. By anchoring to g instead, we greatly improve the alignment.
+
+<Comparison client:visible changePositionOnHover>
+  <img slot="itemOne" src={pyramidEmirFixed.src} alt="Fixed, anchored to the green channel" />
+  <img slot="itemTwo" src={pyramidEmir.src} alt="Original, anchored to the blue channel" />
+</Comparison>

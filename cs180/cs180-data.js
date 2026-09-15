@@ -9,6 +9,14 @@ data.push({
     externalLink: false
 });
 
+data.push({
+    title: "Project 1: Colorizing the Prokudin-Gorskii Photo Collection",
+    organization: "Aligning glass-plate color channels with single-scale and pyramid search, using SSD and NCC.",
+    img: "mini/proj1Mini.jpg",
+    href: "proj1/",
+    externalLink: false
+});
+
 
 function getCardTemplate(title, organization, img, href, externalLink) {
     const badge = externalLink
