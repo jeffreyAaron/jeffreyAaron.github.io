@@ -1,0 +1,339 @@
+---
+title: CS 180 Project 2
+theme: light
+favicon: favicon.svg
+description: CS 180 Project 2 — Fun with Filters and Frequencies
+---
+
+import Header from "./components/Header.astro";
+import Figure from "./components/Figure.astro";
+import Picture from "./components/Picture.astro";
+import { Comparison } from "./components/Comparison";
+import Wide from "./components/Wide.astro";
+
+import part11 from "./assets/part1_1.png";
+import cameraman from "./assets/cameraman.png";
+import part12 from "./assets/part1_2.png";
+import part12Thresholds from "./assets/part1_2_thresholds.png";
+import part13 from "./assets/part1_3.png";
+import part13Dog from "./assets/part1_3_dog_filters.png";
+import part13Verify from "./assets/part1_3_verify.png";
+import blurryFriends from "./assets/blurryFriends.jpg";
+import part21Friends from "./assets/part2_1_friends.png";
+import part21Taj from "./assets/part2_1_taj.png";
+import part21KernelSweep from "./assets/part2_1_kernel_sweep.jpg";
+import part21AlphaSweep from "./assets/part2_1_alpha_sweep.jpg";
+import part21Recovery from "./assets/part2_1_recovery_test.jpg";
+import part22DerekNutmeg from "./assets/part2_2_derek_nutmeg.jpg";
+import part22Hybrid2 from "./assets/part2_2_hybrid2.jpg";
+import part22Hybrid3 from "./assets/part2_2_hybrid3.jpg";
+import part23Stacks from "./assets/part2_3_stacks.jpg";
+import part24VerticalSeam from "./assets/part2_4_vertical_seam.jpg";
+import part24Blend2 from "./assets/part2_4_blend2.jpg";
+import part24Blend3 from "./assets/part2_4_blend3.jpg";
+import part24FavoriteStacks from "./assets/part2_4_favorite_blend_stacks.jpg";
+import part24Blend3Color from "./assets/part2_4_blend3_color.jpg";
+import part22Fourier from "./assets/part2_2_fourier.jpg";
+
+<Header
+  title="Project 2: Fun with Filters and Frequencies"
+  conference="CS 180, UC Berkeley — Fall 2026"
+  authors={[{ name: "Jeffrey Aaron", url: "https://jeffreyaaron.dev", institution: "UC Berkeley" }]}
+  links={[{ name: "CS 180 Projects", url: "../", icon: "ri:arrow-left-line" }]}
+/>
+
+## Part 1: Fun with Filters
+
+### Part 1.1: Convolutions from scratch
+
+To hand code the convolution function, I started out by writing a function called `conv2d` for the four for loop case. First I flip the kernel and then pad the input image by one less than kernel height/width to ensure that the kernel is within bounds when we scan across the whole image. Because I chose to implement the function with full padding, the size of output image is the size of the original image plus the size of the kernel minus one.
+
+Then for verification, I ensured that the difference between my func and scipy's function was under a very low threshold.
+I did this using this operation: `np.abs(mine - ref).max()`
+
+#### Convolution with four for loops
+
+```python
+# implemented with full padding
+def conv2d(image, kernel):
+    kHeight, kWidth = kernel.shape
+    height, width = image.shape
+    height = height + kHeight - 1
+    width = width + kWidth - 1
+    image = np.pad(image, ((kHeight-1, kHeight-1), (kWidth-1, kWidth-1)))
+    kernel = np.flip(kernel)
+    outputImage = np.zeros((height, width))
+    for r in range(height):
+        for c in range(width):
+            output = 0
+            for kr in range(kHeight):
+                for kc in range(kWidth):
+                    kernel_value = kernel[kr][kc]
+                    output += kernel_value * image[r + kr][c + kc]
+
+            outputImage[r][c] = output
+
+    return outputImage
+```
+
+#### Convolution with two for loops
+
+```python
+# two for loops version
+def conv2d_optimized(image, kernel):
+    kHeight, kWidth = kernel.shape
+    height, width = image.shape
+    height = height + kHeight - 1
+    width = width + kWidth - 1
+    image = np.pad(image, ((kHeight-1, kHeight-1), (kWidth-1, kWidth-1)))
+    kernel = np.flip(kernel)
+    outputImage = np.zeros((height, width))
+    for r in range(height):
+        for c in range(width):
+            outputImage[r][c] = np.sum(image[r:r+kHeight, c:c+kWidth] * kernel)
+
+    return outputImage
+```
+
+<Wide>
+  <Figure>
+    <Picture slot="figure" src={part11} alt="Original grayscale photo, 9x9 box blur, finite difference in x, finite difference in y" />
+    <span slot="caption">Original, 9x9 box blur, finite difference x, finite difference y</span>
+  </Figure>
+</Wide>
+
+#### Boundaries
+
+In regards to the boundaries of the image, I zero fill the padded edges of the images. I also use full padding which outputs an image that every kernel position contains at least one pixel from the source image. This matches the behavior of scipy's convolve2d if you set the params `boundary='fill', fillvalue=0, mode='full'`
+
+#### Performance
+
+```text
+image shape: (605, 454)
+four for loop (s): 8.5484
+two for loop (s): 0.5539
+scipy time (s): 0.0257
+```
+
+For the image of myself, the scipy implementation was 21 times faster than the 2 for loop implementation and roughly 300x faster than the 4 for loop implementation. It is surprising how much faster the 2 loop implementation performs over the 4 loop. I think this is because the 4 loop implementation needs to sweep over 2 extra dimensions (the kernel). For a kernel of 9x9, this is 81x more iterations.
+
+### Part 1.2: Finite difference operator
+
+<Figure>
+  <Picture slot="figure" src={cameraman} alt="The original cameraman image" />
+  <span slot="caption">The original cameraman image</span>
+</Figure>
+
+I applied the finite difference operator using the `convolve2d` function from `scipy.signal`. I chose to use the `boundary='symm'` option to prevent strong lines and thresholding at the edge of the image. The partial derivatives in x and y are computed using the kernels Dx and Dy. The gradient magnitude is the sqrt of the sum of the squares of the convolution Dx and Dy. The binarized edge image is obtained by applying a threshold to the gradient magnitude.
+
+<Figure>
+  <Picture slot="figure" src={part12} alt="Cameraman partial derivative in x, partial derivative in y, gradient magnitude, and binarized edges at threshold 0.3" />
+  <span slot="caption">Partial derivative in x, partial derivative in y, gradient magnitude, binarized edges (threshold = 0.3)</span>
+</Figure>
+
+#### Trying different thresholds
+
+I chose the threshold of `0.3` because at this point, the noise from the field in the background is mostly gone and the edges of the cameraman are mostly intact.
+
+<Figure>
+  <Picture slot="figure" src={part12Thresholds} alt="Binarized gradient magnitude at thresholds 0.1, 0.15, 0.2, 0.25, 0.3 and 0.4" />
+  <span slot="caption">Thresholds 0.1, 0.15, 0.2, 0.25, 0.3, 0.4</span>
+</Figure>
+
+### Part 1.3: Derivative of Gaussian (DoG) filter
+
+#### Creation of the weighted Gaussian
+
+I followed the instructions to create the weighted Gaussian kernel by first creating a 1D version and then using outer product to build the whole kernel. My kernel is 5x5.
+
+```python
+# create gaussian kernel
+
+gaussianKernel1d = cv2.getGaussianKernel(5, 1.0)
+gaussianKernel2d = gaussianKernel1d @ gaussianKernel1d.T
+```
+
+#### Repeat thresholding steps of 1.2
+
+<Figure>
+  <Picture slot="figure" src={part13} alt="Cameraman before and after Gaussian blur, gradient magnitude, partial derivatives in x and y, and binarized edges at threshold 0.2" />
+  <span slot="caption">Before blur, after blur, gradient magnitude, partial derivatives in x and y, binarized edges (threshold = 0.2)</span>
+</Figure>
+
+With the Gaussian smoothing, I first noticed that the lines outputted are slightly thicker. I also noticed that they are more contiguous with less breaks. Additionally, I was able to use a lower binary threshold to reduce the noise. This indicates that the Gaussian filtered some of the noise.
+
+#### Derivative of Gaussian (DoG) filters
+
+The DoG filters are a combination of the Gaussian kernel convolved with the Dx and Dy derivative kernels.
+Instead of applying two filters in sequence, we can first apply the Dx kernel to the Gaussian kernel as convolution is associative. So image * Gaussian * Dx is the same as image * (Gaussian * Dx).
+
+```python
+dog_kernel_x = scipy.signal.convolve2d(gaussianKernel2d, Dx, mode='full')
+dog_kernel_y = scipy.signal.convolve2d(gaussianKernel2d, Dy, mode='full')
+```
+
+<Figure>
+  <Picture slot="figure" src={part13Dog} alt="The DoG filters in x and y shown as images" />
+  <span slot="caption">DoG filter in x (5x7) and DoG filter in y (7x5)</span>
+</Figure>
+
+#### Verifying that one convolution matches two
+
+I tried both approaches of applying the convolutions individually (image * Gaussian * Dx) and by using the DoG kernel (Gaussian * Dx). The results are identical. I used mode='full' to preserve all the information when creating the DoG kernel. Without this, the kernel size would be 5x5 and this would cut off some low value rows. It may not be noticeable visibly, but it will make a difference numerically.
+
+```text
+max difference in x: 6.38378239159465e-16
+max difference in y: 4.518954654919582e-16
+max difference in magnitude: 6.38378239159465e-16
+```
+
+<Figure>
+  <Picture slot="figure" src={part13Verify} alt="Binarized edges from blur then Dx and Dy next to binarized edges from the DoG filters" />
+  <span slot="caption">Blur then Dx and Dy (two convolutions) vs. the DoG filters (one convolution), threshold = 0.2</span>
+</Figure>
+
+## Part 2: Fun with Frequencies
+
+### Part 2.1: Image sharpening
+
+<Figure>
+  <Picture slot="figure" src={blurryFriends} alt="A blurry photo of my friends" />
+  <span slot="caption">The blurry photo of my friends</span>
+</Figure>
+
+In order to sharpen the images, we can use the method described in class by blurring the image (applying a low pass filter) and then subtracting the blurred image from the original image. This difference leaves us with the details in the image. Then we can add this difference back to the original image by a factor. This ends up adding more details to the image.
+
+Because the image of my friend was very blurry, I found that applying two filters with two different kernel sizes helped to enhance the details. I found that the different kernel sizes target different levels of blur.
+
+<Wide>
+  <Figure>
+    <Picture slot="figure" src={part21Friends} alt="Blurry friends photo before, the high frequency details, after the first sharpening with a 7x7 kernel, and after the second sharpening with a 3x3 kernel" />
+    <span slot="caption">Before, details from the second pass (high frequencies, scaled up 10x to show), after first sharpening (7x7, sigma = 1, alpha = 2), after second sharpening (3x3, sigma = 1, alpha = 2)</span>
+  </Figure>
+</Wide>
+
+<Wide>
+  <Figure>
+    <Picture slot="figure" src={part21Taj} alt="Taj Mahal before, blurred, the high frequency details, and after sharpening" />
+    <span slot="caption">Before, blurred, details (high frequencies), after sharpening (kernel 5x5, sigma = 1, alpha = 1.2)</span>
+  </Figure>
+</Wide>
+
+#### Sweeping different kernel sizes
+
+As mentioned above, for the picture of my friends, I used two rounds of sharpening with different size kernels. I wanted to see if kernel size actually made a noticeable difference. So I sweep the different kernel sizes and kept the alpha constant at 10. I found that the different kernel sizes didn't make a huge difference visually.
+
+<Wide>
+  <Figure>
+    <Picture slot="figure" src={part21KernelSweep} alt="Sharpened Taj Mahal with kernel sizes 1x1, 3x3, 5x5, 7x7, 13x13 and 15x15" />
+    <span slot="caption">Kernel sizes 1x1, 3x3, 5x5, 7x7, 13x13, 15x15 (sigma = 1)</span>
+  </Figure>
+</Wide>
+
+#### Sweeping different alphas
+
+After seeing that changing the kernel size didn't change much visually, I experimented with different alpha values and the difference was noticeable. As alpha went up, the edge of the taj mahal became sharper and darker. At the higher alphas, the edges were very unnaturally dark.
+
+<Wide>
+  <Figure>
+    <Picture slot="figure" src={part21AlphaSweep} alt="Sharpened Taj Mahal with alpha 0.5, 1, 2, 4, 6 and 8" />
+    <span slot="caption">Alpha = 0.5, 1, 2, 4, 6, 8 (kernel 5x5, sigma = 1)</span>
+  </Figure>
+</Wide>
+
+#### Testing recovery: blur a sharp image, then sharpen it
+
+Trying to recover a blurred image with sharpening is an interesting problem. From the results, it seems that there is essential information lost when the blurred operation is applied. Even though the sharp function visibly makes the edges stronger, the information about the original image is lost. The guassian is a destructive operation and can't be fully reversed.
+
+<Wide>
+  <Figure>
+    <Picture slot="figure" src={part21Recovery} alt="A sharp photo, a blurred version of it, and the blurred version after sharpening" />
+    <span slot="caption">Original (sharp), blurred (kernel 19x19, sigma = 3), blurred then sharpened (alpha = 3)</span>
+  </Figure>
+</Wide>
+
+### Part 2.2: Hybrid images
+
+In order to create the hybrid images, we are essentially taking two images that ideally have different frequency bands. For the high frequnecy image, we remove the low frequency componenent by subtracting a blurred image from the initial image (high pass). For the low frequency image, we blur the image to remove the high frequency components (low pass). Then we add the two images together to create a hybrid image.
+
+<Wide>
+  <Figure>
+    <Picture slot="figure" src={part22DerekNutmeg} alt="Original photo of Nutmeg the cat, original photo of Derek, and the hybrid of the two" />
+    <span slot="caption">Original im1 (Nutmeg), original im2 (Derek), hybrid (sigma1 = 10, sigma2 = 18, kernel 60x60)</span>
+  </Figure>
+</Wide>
+
+<Wide>
+  <Figure>
+    <Picture slot="figure" src={part22Hybrid2} alt="Original Tesla photo, original orca photo, and the hybrid of the two" />
+    <span slot="caption">Original im1 (Tesla), original im2 (orca), hybrid (sigma1 = 4, sigma2 = 8, kernel 60x60)</span>
+  </Figure>
+</Wide>
+
+#### Favorite hybrid: Fourier analysis
+
+<Wide>
+  <Figure>
+    <Picture slot="figure" src={part22Fourier} alt="Fourier analysis of the Tesla and orca hybrid: both inputs, the high pass and low pass filtered versions, and the hybrid, each with its log magnitude Fourier transform below it" />
+    <span slot="caption">Top: im1 (input), im2 (input), im1 high pass, im2 low pass, hybrid. Bottom: log magnitude Fourier transform of each.</span>
+  </Figure>
+</Wide>
+
+<Wide>
+  <Figure>
+    <Picture slot="figure" src={part22Hybrid3} alt="Original photo of a bird on a wire, original photo of a person looking at the ocean, and the hybrid of the two" />
+    <span slot="caption">Original im1 (bird), original im2 (person on cliff), hybrid (sigma1 = 4, sigma2 = 9, kernel 59x59). Bird photo by Maria de Bruyn, <a href="https://mybeautifulworldblog.com">mybeautifulworldblog.com</a>.</span>
+  </Figure>
+</Wide>
+
+### Part 2.3: Gaussian and Laplacian stacks
+
+<Wide>
+  <Figure>
+    <Picture slot="figure" src={part23Stacks} alt="Gaussian and Laplacian stacks of the apple and orange images, five levels each, in the style of Figure 3.42" />
+    <span slot="caption">Apple Gaussian stack, apple Laplacian stack, orange Gaussian stack, orange Laplacian stack (5 levels, sigma = 2, kernel 12x12). Summing each Laplacian stack reconstructs its original image to within floating point error.</span>
+  </Figure>
+</Wide>
+
+### Part 2.4: Multiresolution blending
+
+<Wide>
+  <Figure>
+    <Picture slot="figure" src={part24VerticalSeam} alt="Apple, orange, a vertical step mask, and the blended oraple result" />
+    <span slot="caption">Apple, orange, mask, blended (oraple). Mask blurred with sigma = 10, kernel 61x61 so the transition band is wide enough to look smooth rather than a hard seam.</span>
+  </Figure>
+</Wide>
+
+<Wide>
+  <Figure>
+    <Picture slot="figure" src={part24Blend2} alt="A starfield photo, a photo of a building against the sky, an irregular mask following the roofline, and the blended result" />
+    <span slot="caption">Blend 2: starfield, building, irregular mask (follows the roofline), blended result</span>
+  </Figure>
+</Wide>
+
+<Wide>
+  <Figure>
+    <Picture slot="figure" src={part24Blend3} alt="A photo of grass and a stream, a photo of a dog's face, an irregular mask following the dog's outline, and the blended result" />
+    <span slot="caption">Blend 3: grass and stream, dog, irregular mask (follows the dog's outline), blended result</span>
+  </Figure>
+</Wide>
+
+#### Favorite blend: process visualization
+
+<Wide>
+  <Figure>
+    <Picture slot="figure" src={part24FavoriteStacks} alt="Laplacian stacks of the grass and dog images, the mask's Gaussian stack, and the blended Laplacian stack at each level, in the style of Figure 10" />
+    <span slot="caption">Grass Laplacian, dog Laplacian, mask Gaussian, blended Laplacian, 5 levels. The mask starts as a sharp cutout and softens level by level, which is what lets the seam disappear.</span>
+  </Figure>
+</Wide>
+
+#### Bonus: color
+
+<Wide>
+  <Figure>
+    <Picture slot="figure" src={part24Blend3Color} alt="Color versions of the grass, dog, mask, and blended result" />
+    <span slot="caption">Same blend as the favorite result, in color. Each channel (R, G, B) is blended separately with the same mask stack, then recombined.</span>
+  </Figure>
+</Wide>
+
+## What I learned

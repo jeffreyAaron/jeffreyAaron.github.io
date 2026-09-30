@@ -17,6 +17,14 @@ data.push({
     externalLink: false
 });
 
+data.push({
+    title: "Project 2: Fun with Filters and Frequencies",
+    organization: "Hybrid images, image sharpening, and multiresolution blending with Gaussian and Laplacian stacks.",
+    img: "mini/proj2Mini.jpg",
+    href: "proj2/",
+    externalLink: false
+});
+
 
 function getCardTemplate(title, organization, img, href, externalLink) {
     const badge = externalLink
