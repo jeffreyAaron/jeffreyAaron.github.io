@@ -1,0 +1,601 @@
+---
+title: CS 180 Project 3
+theme: light
+favicon: favicon.svg
+description: CS 180 Project 3 — Text-Guided Editing with Flow Models
+---
+
+import Header from "./components/Header.astro";
+import Figure from "./components/Figure.astro";
+import Picture from "./components/Picture.astro";
+import TwoColumns from "./components/TwoColumns.astro";
+
+import original from "./assets/original.jpg";
+import p11 from "./assets/p1_1_noisy.jpg";
+import p12t0 from "./assets/p1_2_t0.jpg";
+import p12t1 from "./assets/p1_2_t1.jpg";
+import p12t2 from "./assets/p1_2_t2.jpg";
+import p13t0 from "./assets/p1_3_t0.jpg";
+import p13t1 from "./assets/p1_3_t1.jpg";
+import p13t2 from "./assets/p1_3_t2.jpg";
+import p14t1 from "./assets/p1_4_t1.jpg";
+import p14t2 from "./assets/p1_4_t2.jpg";
+import p14t3 from "./assets/p1_4_t3.jpg";
+import p15steps from "./assets/p1_5_steps.jpg";
+import p15compare from "./assets/p1_5_compare.jpg";
+import p16 from "./assets/p1_6_samples.jpg";
+import p21 from "./assets/p2_1_cfg.jpg";
+import p31camp from "./assets/p3_1_campanile.jpg";
+import p31my1 from "./assets/p3_1_my1.jpg";
+import p31my2 from "./assets/p3_1_my2.jpg";
+import p31web from "./assets/p3_1_web.jpg";
+import p31d1 from "./assets/p3_1_drawing1.jpg";
+import p31d2 from "./assets/p3_1_drawing2.jpg";
+import p32camp from "./assets/p3_2_campanile.jpg";
+import p32my1 from "./assets/p3_2_my1.jpg";
+import p32my2 from "./assets/p3_2_my2.jpg";
+import p33 from "./assets/p3_3_anagram.jpg";
+import p33b from "./assets/p3_3_anagram2.jpg";
+import p34h0 from "./assets/p3_4_hybrid0.jpg";
+import p34h0f from "./assets/p3_4_hybrid0_far.jpg";
+import p34h1 from "./assets/p3_4_hybrid1.jpg";
+import p34h1f from "./assets/p3_4_hybrid1_far.jpg";
+import b12noise from "./assets/b1_2_noising.jpg";
+import b121loss from "./assets/b1_2_1_loss.jpg";
+import b121e1 from "./assets/b1_2_1_epoch1.jpg";
+import b22loss from "./assets/b2_2_loss.jpg";
+import b25sched from "./assets/b2_5_loss_sched.jpg";
+import b25const from "./assets/b2_5_loss_const.jpg";
+import b121e5 from "./assets/b1_2_1_epoch5.jpg";
+import b122ood from "./assets/b1_2_2_ood.jpg";
+import b123e1 from "./assets/b1_2_3_epoch1.jpg";
+import b123e5 from "./assets/b1_2_3_epoch5.jpg";
+import b23e1 from "./assets/b2_3_epoch0.jpg";
+import b23e5 from "./assets/b2_3_epoch1.jpg";
+import b23e10 from "./assets/b2_3_epoch2.jpg";
+import b26s1 from "./assets/b2_6_sched0.jpg";
+import b26s5 from "./assets/b2_6_sched1.jpg";
+import b26s10 from "./assets/b2_6_sched2.jpg";
+import b26c1 from "./assets/b2_6_const0.jpg";
+import b26c5 from "./assets/b2_6_const1.jpg";
+import b26c10 from "./assets/b2_6_const2.jpg";
+
+<Header
+  title="Project 3: Text-Guided Editing with Flow Models"
+  conference="CS 180, UC Berkeley — Fall 2026"
+  authors={[{ name: "Jeffrey Aaron", url: "https://jeffreyaaron.dev", institution: "UC Berkeley" }]}
+  links={[{ name: "CS 180 Projects", url: "../", icon: "ri:arrow-left-line" }]}
+/>
+
+In this project, I implemented flow matching from scratch and also played around with a pretrained flow matching model. I was able to generate some pretty cool results with the flow matching model with custom text prompts.
+
+
+## Part A: Exploring the Power of Flow Models
+
+### Part 1: Visualizing Training and Sampling
+
+Original image used for Part 1:
+
+<Figure>
+  <Picture slot="figure" src={original} alt="My original photo of flowers held in a field" />
+</Figure>
+
+
+#### 1.1 Constructing Noisy Training Inputs
+
+To generate the noisy images, I generated random noise with torch.randn_like and then add a portion of that noise into the image depending on the noise level.
+
+```python
+def interpolate(image, noise, t):
+    return image*t+(1-t)*noise
+```
+
+<Figure>
+  <Picture slot="figure" src={p11} alt="Original image and noisy versions at t = 0.25, 0.50, 0.75" />
+</Figure>
+
+
+#### 1.2 Classical Denoising
+
+Classical denoising used different gaussian levels to blur out the noise. This wasn't very effective and still left grainy images.
+
+<Figure>
+  <Picture slot="figure" src={p12t0} alt="Gaussian blur denoising at t = 0.25" />
+</Figure>
+
+<Figure>
+  <Picture slot="figure" src={p12t1} alt="Gaussian blur denoising at t = 0.50" />
+</Figure>
+
+<Figure>
+  <Picture slot="figure" src={p12t2} alt="Gaussian blur denoising at t = 0.75" />
+</Figure>
+
+
+#### 1.3 One-Step Denoising
+
+The flow model does much better at reducing noise, however with only one step, it removes a lot of detail as it has to make a large guess of what the target is.
+
+```python
+def one_step_denoise(x, t, condition, predict_velocity):
+    return x + (1-t)*predict_velocity(x, t, condition)
+```
+
+<Figure>
+  <Picture slot="figure" src={p13t0} alt="One-step denoising at t = 0.25" />
+</Figure>
+
+<Figure>
+  <Picture slot="figure" src={p13t1} alt="One-step denoising at t = 0.50" />
+</Figure>
+
+<Figure>
+  <Picture slot="figure" src={p13t2} alt="One-step denoising at t = 0.75" />
+</Figure>
+
+
+#### 1.4 Visualizing Velocity
+
+Intuitiely, starting from a more noisy image results in more error in the final output. I did notice that error is more noticable in the grass texture where there are higher freq details.
+
+<Figure>
+  <Picture slot="figure" src={p14t1} alt="Noisy image, predicted update, ground-truth update and error heatmap at t = 0.25" />
+</Figure>
+
+<Figure>
+  <Picture slot="figure" src={p14t2} alt="Noisy image, predicted update, ground-truth update and error heatmap at t = 0.50" />
+</Figure>
+
+<Figure>
+  <Picture slot="figure" src={p14t3} alt="Noisy image, predicted update, ground-truth update and error heatmap at t = 0.75" />
+</Figure>
+
+
+#### 1.5 Iterative Denoising with Euler Sampling
+
+With iterative denoising, the edges of box at the top are a bit sharper. However, the difference from the one step is not that great as I would have thought.
+
+```python
+x_out = x_out + h * velocity(x_out, t_var)
+```
+
+<Figure>
+  <Picture slot="figure" src={p15steps} alt="Euler sampling from t = 0.50 to t = 1.00 in steps of 0.02" />
+</Figure>
+
+<Figure>
+  <Picture slot="figure" src={p15compare} alt="Comparison of the Euler result with the original, one-step and Gaussian blur results" />
+</Figure>
+
+
+#### 1.6 Generating Images from Noise
+
+Prompt: "a high quality photo"
+
+Without guidance, the model lands in the average of different manifolds instead of commiting to one realistic looking image.
+
+<Figure>
+  <Picture slot="figure" src={p16} alt="Five samples generated from noise with the prompt a high quality photo" />
+</Figure>
+
+
+### Part 2: Conditional Generation and Guidance
+
+#### 2.1 Classifier-Free Guidance
+
+Guidance weight w = 7, prompt: "a high quality photo"
+
+The classifier free guidance greately improves the realism of the image. However, it also reduces the diveristy of the output. The trend seems to be humans (although this model is capable of generating other objects).
+
+```python
+def cfg_velocity(x, t, condition, w, predict_velocity, null_condition=''):
+    v_c = predict_velocity(x, t, condition)
+    v_u = predict_velocity(x, t, null_condition)
+    return v_c + w * (v_c - v_u)
+```
+
+<Figure>
+  <Picture slot="figure" src={p21} alt="Five samples generated with classifier-free guidance" />
+</Figure>
+
+
+### Part 3: Creative Applications
+
+#### 3.1 Image-to-Image Editing
+
+##### Campanile
+
+<Figure>
+  <Picture slot="figure" src={p31camp} alt="Campanile edits at starting times 0.02 to 0.50" />
+</Figure>
+
+##### My images
+
+<Figure>
+  <Picture slot="figure" src={p31my1} alt="Edits of my first personal image" />
+</Figure>
+
+<Figure>
+  <Picture slot="figure" src={p31my2} alt="Edits of my second personal image" />
+</Figure>
+
+##### Hand-drawn and web images
+
+<Figure>
+  <Picture slot="figure" src={p31web} alt="Edits of a web image of a soup can at starting times 0.02 to 0.50" />
+</Figure>
+
+<Figure>
+  <Picture slot="figure" src={p31d1} alt="Edits of my first hand-drawn image" />
+</Figure>
+
+<Figure>
+  <Picture slot="figure" src={p31d2} alt="Edits of my second hand-drawn image" />
+</Figure>
+
+
+#### 3.2 Text-Guided Image Editing
+
+With text prompts, the model is steered towards a certain output and I believe this makes the outputs more coherent. For exapmle, the flowers are flowers from the beginning instead of spawing as a human. The dragon is also a dragon from the start. I do feel like with very high noise images, the input image is mostly ignored and the model comes up with its own interpretation of the text prompt.
+
+##### Campanile, prompt: "tall spoon"
+
+<Figure>
+  <Picture slot="figure" src={p32camp} alt="Campanile text-guided edits with the prompt tall spoon" />
+</Figure>
+
+##### My image 1, prompt: "flowers held in a field"
+
+<Figure>
+  <Picture slot="figure" src={p32my1} alt="Text-guided edits of my first image" />
+</Figure>
+
+##### My image 2, prompt: "dragon"
+
+<Figure>
+  <Picture slot="figure" src={p32my2} alt="Text-guided edits of my second image" />
+</Figure>
+
+
+#### 3.3 Visual Anagrams
+
+Anagram 1 prompts: "an oil painting of a fish that is cooking curry" and "an oil painting of family eating dinner around a table"
+
+These ones worked really well! I really like the fish and family anagram.
+
+```python
+def visual_anagrams(noise, condition_a, condition_b, predict_velocity, w=7, step_size=0.02):
+    def anagramVelocity(x, t):
+      v1 = cfg_velocity(x, t, condition_a, w, predict_velocity, null_condition)
+      v2 = rotate180(cfg_velocity(rotate180(x), t, condition_b, w, predict_velocity, null_condition))
+      v = (v1 + v2)/2
+      return v
+    x_out, frames = euler_sample(noise, 0, step_size, anagramVelocity)
+    return x_out #, frames
+```
+
+<Figure>
+  <Picture slot="figure" src={p33} alt="Visual anagram shown upright and rotated 180 degrees" />
+</Figure>
+
+Anagram 2 prompts: "a modern art of a cat with blue background" and "a modern art of a ocean wave and mountain"
+
+<Figure>
+  <Picture slot="figure" src={p33b} alt="Second visual anagram shown upright and rotated 180 degrees" />
+</Figure>
+
+
+#### 3.4 Hybrid Images
+
+Similar to the hybrid images in the previous project, having high frequency prompts as the large image and low frequency prompts as the small image was ideal for the best results.
+
+```python
+def make_hybrids(noise, condition_a, condition_b, predict_velocity, w=7, step_size=0.02):
+    def hybridVelocity(x, t):
+        v1 = cfg_velocity(x, t, condition_a, w, predict_velocity, null_condition)
+        v2 = cfg_velocity(x, t, condition_b, w, predict_velocity, null_condition)
+        # guassian blur kernel
+        v1_low = lowpass(v1)
+        v2_low = lowpass(v2)
+        v2_high = v2 - v2_low
+        v = v1_low + v2_high
+        return v
+    x_out, frames = euler_sample(noise, 0, step_size, hybridVelocity)
+    return x_out #, frames
+```
+
+Hybrid 1: far "a watercolor of a lion's face", close "a watercolor of a dense forest"
+
+<Figure>
+  <Picture slot="figure" src={p34h0} alt="First hybrid image at full size" />
+</Figure>
+
+<Figure>
+  <img slot="figure" src={p34h0f.src} alt="First hybrid image downsampled to 64x64" width="64" height="64" class="rounded-lg" style="width:64px;height:64px;max-width:none" />
+</Figure>
+
+Hybrid 2: far "a lithograph of a horse", close "a lithograph of a crowded city street"
+
+<Figure>
+  <Picture slot="figure" src={p34h1} alt="Second hybrid image at full size" />
+</Figure>
+
+<Figure>
+  <img slot="figure" src={p34h1f.src} alt="Second hybrid image downsampled to 64x64" width="64" height="64" class="rounded-lg" style="width:64px;height:64px;max-width:none" />
+</Figure>
+
+
+## Part B: Flow Matching from Scratch
+
+### Part 1: Training a Single-Step Denoising UNet
+
+#### 1.1 Implementing the UNet
+
+I followed the given implementation to setup the following layers.
+
+```python
+a = self.conv1(x)
+b = self.down1(a)
+c = self.down2(b)
+d = self.flatten(c)
+
+e = self.unflatten(d)
+e = self.up1(torch.cat([e, c], dim = 1))
+e = self.up2(torch.cat([e, b], dim = 1))
+e = self.conv2(torch.cat([e, a], dim = 1))
+return self.out(e)
+```
+
+#### 1.2 Using the UNet to Train a Denoiser
+
+Noising process for σ = 0.0, 0.2, 0.4, 0.5, 0.6, 0.8, 1.0.
+
+<Figure>
+  <Picture slot="figure" src={b12noise} alt="MNIST digits noised at sigma 0.0, 0.2, 0.4, 0.5, 0.6, 0.8 and 1.0" />
+</Figure>
+
+##### 1.2.1 Training
+
+The loss converged indicating that the model had at least learned something.
+
+```python
+noisyVersion = images + noise_level * torch.randn_like(images)
+outputs = model_uncond(noisyVersion)
+loss = criterion(outputs, images)
+```
+
+Training loss curve:
+
+<Figure>
+  <Picture slot="figure" src={b121loss} alt="Training loss curve for the denoiser over 5 epochs" />
+</Figure>
+
+<TwoColumns>
+  <div slot="left">
+
+Denoised test results after epoch 1:
+
+<Figure>
+  <Picture slot="figure" src={b121e1} alt="Clean, noisy and denoised test digits after epoch 1" />
+</Figure>
+
+  </div>
+  <div slot="right">
+
+Denoised test results after epoch 5:
+
+<Figure>
+  <Picture slot="figure" src={b121e5} alt="Clean, noisy and denoised test digits after epoch 5" />
+</Figure>
+
+  </div>
+</TwoColumns>
+
+##### 1.2.2 Out-of-Distribution Testing
+
+The results above show that the model works fine under the sigma level that we trained the model on `simga = 0.5`. However, we also want to see how it performs for other noise levels. As the noise was increased above 0.5, the model struggled to recreate the number perfectly and had some artifacts. Below 0.5, the model didn't show any significant difference.
+
+<Figure>
+  <Picture slot="figure" src={b122ood} alt="Denoiser results on a test digit at sigma 0.0, 0.2, 0.4, 0.5, 0.6, 0.8 and 1.0" />
+</Figure>
+
+##### 1.2.3 Denoising Pure Noise
+
+One step denoising for pure noise essentially caused the model to average all the outputs. Since the model has to guess from pure noise to a number in one step, the model maps the same start point to many endpoints. The loss optimizes the model to average all the MNIST numbers. From epoch 1 and epoch 5, the only difference I notice is that the epoch 1 results are more grainy.
+
+```python
+noisyVersion = torch.randn_like(images)
+outputs = model(noisyVersion)
+```
+
+<TwoColumns>
+  <div slot="left">
+
+After epoch 1:
+
+<Figure>
+  <Picture slot="figure" src={b123e1} alt="Pure noise denoising results after epoch 1" />
+</Figure>
+
+  </div>
+  <div slot="right">
+
+After epoch 5:
+
+<Figure>
+  <Picture slot="figure" src={b123e5} alt="Pure noise denoising results after epoch 5" />
+</Figure>
+
+  </div>
+</TwoColumns>
+
+### Part 2: Training a Flow Matching Model
+
+#### 2.1 Adding Time Conditioning to UNet
+
+To help the model to learn to actually denoise, it needs to be fed images at different noise levels and expect to return a slightly less noised version of it. This is done by adding time as a condition which tells the model which stage its in. If the model is at t = 0.9 (very little noise), the model will learn not to make large adjustments.
+
+#### 2.2 Training the UNet
+
+```python
+noise = torch.randn_like(x_1)
+t = torch.rand(x_1.shape[0], device=x_1.device)
+
+x_t = torch.zeros_like(x_1)
+for i in range(x_1.shape[0]):
+  x_t[i] = (1-t[i]) * noise[i] + t[i] * x_1[i]
+pred = unet(x_t, t)
+loss = nn.MSELoss()(pred, x_1 - noise)
+```
+
+Training loss curve:
+
+<Figure>
+  <Picture slot="figure" src={b22loss} alt="Training loss curve for the time-conditioned UNet" />
+</Figure>
+
+#### 2.3 Sampling from the UNet
+
+From the results, there is stil some artifacting and this is because the model still doesn't fully commit to a single digit from the beginning. This average behavior is more visible at epoch 1. The model still produces lines but they don't fully match a number.
+
+```python
+for t in range(num_ts):
+  t = torch.ones(n, device=device) * t/num_ts
+  x_t = x_t + unet(x_t, t) * (1/num_ts)
+```
+
+After 1 epoch:
+
+<Figure>
+  <Picture slot="figure" src={b23e1} alt="Time-conditioned samples after 1 epoch" />
+</Figure>
+
+After 5 epochs:
+
+<Figure>
+  <Picture slot="figure" src={b23e5} alt="Time-conditioned samples after 5 epochs" />
+</Figure>
+
+After 10 epochs:
+
+<Figure>
+  <Picture slot="figure" src={b23e10} alt="Time-conditioned samples after 10 epochs" />
+</Figure>
+
+#### 2.4 Adding Class-Conditioning to UNet
+
+Here we add classes to the UNet. However, to me, this feels a little like cheating at the model could very easily memorize the dataset.
+
+```python
+c_vec = F.one_hot(c, num_classes=self.num_classes).to(torch.float32)
+if mask is not None:
+  c_vec = c_vec * mask[:, None]
+
+e = c1 *self.unflatten(d) + t1
+e =  c2 *self.up1(torch.cat([e, c_down], dim = 1)) + t2
+```
+
+#### 2.5 Training the UNet
+
+For training, I tried two different approaches, a scheduled learner that starts at 1e-2 and then dropped down to roughly 1e-3. The other option was to maintain a fixed 1e-3 learning rate. From the training curves and the outputs, both produced similar results. Because the scheduled version decays, it needs a higher starting learning rate than the constant version.
+
+```python
+mask = torch.rand(x_1.shape[0], device=device)
+mask = mask > p_uncond
+pred = unet(x_t,c,t,mask)
+loss = nn.MSELoss()(pred, x_1 - noise)
+```
+
+Training loss curves:
+
+<TwoColumns>
+  <div slot="left">
+
+**Scheduled learning rate**
+
+<Figure>
+  <Picture slot="figure" src={b25sched} alt="Class-conditioned training loss with the scheduler" />
+</Figure>
+
+  </div>
+  <div slot="right">
+
+**Constant learning rate (1e-3)**
+
+<Figure>
+  <Picture slot="figure" src={b25const} alt="Class-conditioned training loss with a constant learning rate" />
+</Figure>
+
+  </div>
+</TwoColumns>
+
+#### 2.6 Sampling from the Class-conditioned UNet
+
+After 1 epoch:
+
+<TwoColumns>
+  <div slot="left">
+
+**Scheduled learning rate**
+
+<Figure>
+  <Picture slot="figure" src={b26s1} alt="Scheduled learning rate samples after 1 epoch" />
+</Figure>
+
+  </div>
+  <div slot="right">
+
+**Constant learning rate (1e-3)**
+
+<Figure>
+  <Picture slot="figure" src={b26c1} alt="Constant learning rate samples after 1 epoch" />
+</Figure>
+
+  </div>
+</TwoColumns>
+
+After 5 epochs:
+
+<TwoColumns>
+  <div slot="left">
+
+**Scheduled learning rate**
+
+<Figure>
+  <Picture slot="figure" src={b26s5} alt="Scheduled learning rate samples after 5 epochs" />
+</Figure>
+
+  </div>
+  <div slot="right">
+
+**Constant learning rate (1e-3)**
+
+<Figure>
+  <Picture slot="figure" src={b26c5} alt="Constant learning rate samples after 5 epochs" />
+</Figure>
+
+  </div>
+</TwoColumns>
+
+After 10 epochs:
+
+<TwoColumns>
+  <div slot="left">
+
+**Scheduled learning rate**
+
+<Figure>
+  <Picture slot="figure" src={b26s10} alt="Scheduled learning rate samples after 10 epochs" />
+</Figure>
+
+  </div>
+  <div slot="right">
+
+**Constant learning rate (1e-3)**
+
+<Figure>
+  <Picture slot="figure" src={b26c10} alt="Constant learning rate samples after 10 epochs" />
+</Figure>
+
+  </div>
+</TwoColumns>

@@ -25,6 +25,14 @@ data.push({
     externalLink: false
 });
 
+data.push({
+    title: "Project 3: Text-Guided Editing with Flow Models",
+    organization: "Flow matching from scratch on MNIST, plus image editing, visual anagrams, and hybrid images with a pretrained flow model.",
+    img: "mini/proj3Mini.jpg",
+    href: "proj3/",
+    externalLink: false
+});
+
 
 function getCardTemplate(title, organization, img, href, externalLink) {
     const badge = externalLink
