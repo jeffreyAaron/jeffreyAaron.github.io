@@ -33,6 +33,14 @@ data.push({
     externalLink: false
 });
 
+data.push({
+    title: "Project 4A: Image Warping and Mosaicing",
+    organization: "Recovering homographies from hand-picked points, warping with nearest-neighbor and bilinear interpolation, rectifying images, and blending photos into mosaics.",
+    img: "mini/proj4aMini.jpg",
+    href: "proj4a/",
+    externalLink: false
+});
+
 
 function getCardTemplate(title, organization, img, href, externalLink) {
     const badge = externalLink

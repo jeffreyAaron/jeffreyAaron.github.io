@@ -1,0 +1,376 @@
+---
+title: CS 180 Project 4A
+theme: light
+favicon: favicon.svg
+description: CS 180 Project 4A — Image Warping and Mosaicing
+---
+
+import Header from "./components/Header.astro";
+import Figure from "./components/Figure.astro";
+import Picture from "./components/Picture.astro";
+
+import atriumFull from "./assets/atrium_mosaic_full.jpg";
+import atrium from "./assets/atrium_mosaic.jpg";
+import skyline from "./assets/skyline_mosaic.jpg";
+import vertical from "./assets/vertical_mosaic.jpg";
+import atrium2 from "./assets/atrium2.jpg";
+import atrium3 from "./assets/atrium3.jpg";
+import atrium4 from "./assets/atrium4.jpg";
+import skyline1 from "./assets/skyline1.jpg";
+import skyline2 from "./assets/skyline2.jpg";
+import skyline3 from "./assets/skyline3.jpg";
+import vert1 from "./assets/vert1.jpg";
+import vert2 from "./assets/vert2.jpg";
+import vert3 from "./assets/vert3.jpg";
+import blendFig from "./assets/blend_figure.jpg";
+import corr from "./assets/correspondences.jpg";
+import gymOrig from "./assets/gym_orig.jpg";
+import gymNN from "./assets/gym_rect_nn.png";
+import robotOrig from "./assets/robot_orig.jpg";
+import robotNN from "./assets/robot_rect_nn.png";
+import robotBil from "./assets/robot_rect_bilinear.png";
+
+<Header
+  title="Project 4A: Image Warping and Mosaicing"
+  conference="CS 180, UC Berkeley — Fall 2026"
+  authors={[{ name: "Jeffrey Aaron", url: "https://jeffreyaaron.dev", institution: "UC Berkeley" }]}
+  links={[{ name: "CS 180 Projects", url: "../", icon: "ri:arrow-left-line" }]}
+/>
+
+The goal of this project was to combine different images using homographies as we learned in class. I was honestly impressed at the results and the tolerance to slightly horizontal or vertical deviation when taking the images.
+
+## Part A.1: Shoot the Pictures
+
+For the images I chose, I had different goals in mind. The first set of the Gateway's Atrium tests to see if the homographies can still hold despite there being objects that are many distances away from each other. The skyline is a classic example. The vertical set wanted to create a falling effect, as if you were looking down from a ledge.
+
+### Atrium
+
+<div class="not-prose grid grid-cols-[repeat(auto-fit,minmax(14rem,1fr))] gap-4">
+  <Figure>
+    <Picture slot="figure" src={atrium2} alt="Atrium 1" />
+    <Fragment slot="caption">Atrium 1</Fragment>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={atrium3} alt="Atrium 2" />
+    <Fragment slot="caption">Atrium 2</Fragment>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={atrium4} alt="Atrium 3" />
+    <Fragment slot="caption">Atrium 3</Fragment>
+  </Figure>
+</div>
+
+### Skyline
+
+<div class="not-prose grid grid-cols-[repeat(auto-fit,minmax(14rem,1fr))] gap-4">
+  <Figure>
+    <Picture slot="figure" src={skyline1} alt="Skyline 1" />
+    <Fragment slot="caption">Skyline 1</Fragment>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={skyline2} alt="Skyline 2" />
+    <Fragment slot="caption">Skyline 2</Fragment>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={skyline3} alt="Skyline 3" />
+    <Fragment slot="caption">Skyline 3</Fragment>
+  </Figure>
+</div>
+
+### Vertical
+
+<div class="not-prose grid grid-cols-[repeat(auto-fit,minmax(14rem,1fr))] gap-4">
+  <Figure>
+    <Picture slot="figure" src={vert1} alt="Vertical 1" />
+    <Fragment slot="caption">Vertical 1</Fragment>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={vert2} alt="Vertical 2" />
+    <Fragment slot="caption">Vertical 2</Fragment>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={vert3} alt="Vertical 3" />
+    <Fragment slot="caption">Vertical 3</Fragment>
+  </Figure>
+</div>
+
+## Part A.2: Recover Homographies
+
+Our goal is to use hand picked points to compute the 3x3 homography matrix. In order to do that, we must construct the matrix below which represents the system of equations that you get after multiplying all the terms of the 3x3 homography matrix with x, y, 1 and solve for x' and y'. Since there are 8 unknowns (the bottom right entry of H can be fixed to 1), we need 4 pairs of points yielding 8 equations.
+
+```python
+def computeH(im1_pts, im2_pts):
+    n = len(im1_pts)
+    A = np.zeros((2*n, 8), dtype=float)
+    b = np.zeros(2*n)
+    for i in range(n):
+        x = im1_pts[i][0]
+        y = im1_pts[i][1]
+        xprime = im2_pts[i][0]
+        yprime = im2_pts[i][1]
+        A[2*i] = [x, y, 1, 0, 0, 0, -x*xprime, -y*xprime]
+        A[2*i + 1] = [0, 0, 0, x, y, 1, -x*yprime, -y*yprime]
+        b[2*i] = xprime
+        b[2*i + 1] = yprime
+
+    H = np.linalg.lstsq(A, b)[0]
+
+    H = np.concat([H, [np.ones_like(H[0])]])
+
+    H = np.reshape(H, (3, 3))
+
+    return H
+```
+
+$$
+\begin{bmatrix} w x' \\ w y' \\ w \end{bmatrix}
+=
+\begin{bmatrix} a & b & c \\ d & e & f \\ g & h & 1 \end{bmatrix}
+\begin{bmatrix} x \\ y \\ 1 \end{bmatrix}
+$$
+
+$$
+\begin{bmatrix} x & y & 1 & 0 & 0 & 0 & -xx' & -yx' \\ 0 & 0 & 0 & x & y & 1 & -xy' & -yy' \end{bmatrix}
+\begin{bmatrix} a \\ b \\ c \\ d \\ e \\ f \\ g \\ h \end{bmatrix}
+=
+\begin{bmatrix} x' \\ y' \end{bmatrix}
+$$
+
+### Correspondences
+
+<Figure>
+  <Picture slot="figure" src={corr} alt="Correspondences between Atrium 1 and Atrium 2" />
+</Figure>
+
+$$
+H_{\text{Atrium}} =
+\begin{bmatrix}
+0.5030 & 1.205\times10^{-3} & 344.9 \\
+-0.1737 & 0.8250 & 54.04 \\
+-4.927\times10^{-4} & 8.400\times10^{-6} & 1
+\end{bmatrix}
+$$
+
+## Part A.3: Warp the Images
+
+### Nearest Neighbor
+
+#### Find the bounds of the warped image
+
+```python
+def warpImageNearestNeighbor(im, H):
+    height, width, channels = im.shape
+
+    # find the bounds
+    topleft = H @ [0, 0, 1]
+    topRight = H @ [width, 0, 1]
+    bottomLeft = H @ [0, height, 1]
+    bottomRight = H @ [width, height, 1]
+
+    corners = np.array([topleft, topRight, bottomLeft, bottomRight]).T
+    corners = corners[:2] / corners[2]
+
+    xmin, ymin = np.floor(corners.min(axis = 1)).astype(int)
+    xmax, ymax = np.ceil(corners.max(axis = 1)).astype(int)
+```
+
+#### Create the output image
+
+We create the output image as the largest values that we get from mapping the corners. We also ensure to use H_inv to do inverse mapping. This prevents empty holes in the image.
+
+```python
+    out_width, out_height = xmax-xmin + 1, ymax-ymin + 1
+
+    image_out = np.zeros((out_height, out_width, channels))
+
+    alpha = np.zeros((out_height, out_width))
+
+    H_inv = np.linalg.inv(H)
+```
+
+#### Map each output pixel back to the source
+
+```python
+    for y in range(ymin, ymax + 1):
+        for x in range(xmin, xmax + 1):
+            # (x, y) to sourceImage
+            out = H_inv @ np.array([x, y, 1])
+            source_x = out[0]/out[2]
+            source_y = out[1]/out[2]
+```
+
+#### Round to the nearest pixel and copy it
+
+This implements the Nearest Neighbor selection. We round the mapped source pixel to an integer which effectively just chooses the nearest pixel.
+
+```python
+            # nearestNeighbor
+            nn_x = np.round(source_x).astype(int)
+            nn_y = np.round(source_y).astype(int)
+
+            # ensure valid
+            if (nn_x >= 0 and nn_x < width and nn_y >= 0 and nn_y < height):
+                alpha[y-ymin, x-xmin] = 1 # alpha high only if the pixel is valid
+                image_out[y - ymin, x - xmin] = im[nn_y, nn_x]
+
+    return image_out, (xmin, ymin, out_width, out_height), alpha
+```
+
+### Bilinear
+
+In order to interpolate in a bilinear fashion, most of the code is the same. However, when we finally map from source to output, we find the mapped pixel plus one to the right, one below, and one diagonal. This gives us 4 points of data which helps with thin features that must stay continuous. After we have the 4 points, we must interpolate them based on how close the raw (decimal) pixel mapping was to the integer pixel mapping. I created a `lerp` helper function for this that linearly interpolates between two values.
+
+The bilinear version takes about 50 percent longer. This is faster than I expected considering the amount of points that we are fetching.
+
+Surprisingly, the nearest neighbor algorithm left a lot of white splotches around boundaries. In the comparison below, you can see a faint border around parts of the robot where the two different colors meet.
+
+```python
+for y in range(ymin, ymax + 1):
+    for x in range(xmin, xmax + 1):
+        ...
+
+        # nearestNeighbor
+        nn_x = np.floor(source_x).astype(int)
+        nn_y = np.floor(source_y).astype(int)
+        nn_x_1 = nn_x + 1
+        nn_y_1 = nn_y + 1
+
+        # ensure valid
+        if (nn_x >= 0 and nn_x_1 < width and nn_y >= 0 and nn_y_1 < height):
+            top = lerp(im[nn_y, nn_x], im[nn_y, nn_x_1], source_x-nn_x)
+            bottom = lerp(im[nn_y_1, nn_x], im[nn_y_1, nn_x_1], source_x-nn_x)
+
+            alpha[y-ymin, x-xmin] = 1 # alpha high only if the pixel is valid
+            image_out[y - ymin, x - xmin] = lerp(top, bottom, source_y-nn_y)
+```
+
+<div class="not-prose grid grid-cols-[repeat(auto-fit,minmax(14rem,1fr))] gap-4">
+  <Figure>
+    <Picture slot="figure" src={robotNN} alt="Nearest neighbor (16.5 s)" />
+    <Fragment slot="caption">Nearest neighbor (16.5 s)</Fragment>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={robotBil} alt="Bilinear (25.3 s)" />
+    <Fragment slot="caption">Bilinear (25.3 s)</Fragment>
+  </Figure>
+</div>
+
+### Image Rectification
+
+#### Gym
+
+For the first image, I rectified the diagonal square. I wanted to see how much it would rotate in order to handle the fact that the initial square was diagonal. The output image is almost like if I turned my head to the side.
+
+<div class="not-prose grid grid-cols-[repeat(auto-fit,minmax(14rem,1fr))] gap-4">
+  <Figure>
+    <Picture slot="figure" src={gymOrig} alt="Gym original" />
+    <Fragment slot="caption">Gym original</Fragment>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={gymNN} alt="Gym rectified" />
+    <Fragment slot="caption">Gym rectified</Fragment>
+  </Figure>
+</div>
+
+#### Robot
+
+For this robot, I rectified the checkerboard square.
+
+<div class="not-prose grid grid-cols-[repeat(auto-fit,minmax(14rem,1fr))] gap-4">
+  <Figure>
+    <Picture slot="figure" src={robotOrig} alt="Robot original" />
+    <Fragment slot="caption">Robot original</Fragment>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={robotNN} alt="Robot rectified" />
+    <Fragment slot="caption">Robot rectified</Fragment>
+  </Figure>
+</div>
+
+<p class="text-sm opacity-70">
+  Side note: Something that I noticed is if the parallel lines (of the square) intersect (the vanishing point) inside the image, the result looks very wrong, with most pixels not being mapped to anything. I think this is what happens when the warp is too strong for the homography to undo.
+</p>
+
+## Part A.4: Blend the Images into a Mosaic
+
+In order to blend the images, I first started by a simple average of pixel values. However, this created strong edges like “seams”. In order to fix this, I applied the alpha blending that was taught in class. The function I defined below, calculates roughly how far a pixel is from the edge. This gives a feathered edge for any portion that overlaps. This helps move the seam to a more unpredictable spot and avoids the hard edges.
+
+<Figure>
+  <Picture slot="figure" src={blendFig} alt="Atrium 1 and 2 inputs, edgeWeight maps, simple average, and weighted blend" />
+</Figure>
+
+```python
+def edgeWeight(x, y, w, h):
+    return min(x, w -1 - x, y, h -1 - y)
+```
+
+### Atrium
+
+<div class="not-prose grid grid-cols-[repeat(auto-fit,minmax(14rem,1fr))] gap-4">
+  <Figure>
+    <Picture slot="figure" src={atrium2} alt="Atrium 1" />
+    <Fragment slot="caption">Atrium 1</Fragment>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={atrium3} alt="Atrium 2" />
+    <Fragment slot="caption">Atrium 2</Fragment>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={atrium4} alt="Atrium 3" />
+    <Fragment slot="caption">Atrium 3</Fragment>
+  </Figure>
+</div>
+
+<Figure>
+  <Picture slot="figure" src={atrium} alt="Atrium mosaic" />
+  <Fragment slot="caption">Atrium mosaic (cropped)</Fragment>
+</Figure>
+
+<Figure>
+  <Picture slot="figure" src={atriumFull} alt="Atrium mosaic, uncropped" />
+  <Fragment slot="caption">Atrium mosaic, uncropped</Fragment>
+</Figure>
+
+### Skyline
+
+<div class="not-prose grid grid-cols-[repeat(auto-fit,minmax(14rem,1fr))] gap-4">
+  <Figure>
+    <Picture slot="figure" src={skyline1} alt="Skyline 1" />
+    <Fragment slot="caption">Skyline 1</Fragment>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={skyline2} alt="Skyline 2" />
+    <Fragment slot="caption">Skyline 2</Fragment>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={skyline3} alt="Skyline 3" />
+    <Fragment slot="caption">Skyline 3</Fragment>
+  </Figure>
+</div>
+
+<Figure>
+  <Picture slot="figure" src={skyline} alt="Skyline mosaic" />
+  <Fragment slot="caption">Skyline mosaic (cropped)</Fragment>
+</Figure>
+
+### Vertical
+
+<div class="not-prose grid grid-cols-[repeat(auto-fit,minmax(14rem,1fr))] gap-4">
+  <Figure>
+    <Picture slot="figure" src={vert1} alt="Vertical 1" />
+    <Fragment slot="caption">Vertical 1</Fragment>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={vert2} alt="Vertical 2" />
+    <Fragment slot="caption">Vertical 2</Fragment>
+  </Figure>
+  <Figure>
+    <Picture slot="figure" src={vert3} alt="Vertical 3" />
+    <Fragment slot="caption">Vertical 3</Fragment>
+  </Figure>
+</div>
+
+<Figure>
+  <Picture slot="figure" src={vertical} alt="Vertical mosaic" />
+  <Fragment slot="caption">Vertical mosaic (cropped)</Fragment>
+</Figure>
