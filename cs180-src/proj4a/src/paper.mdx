@@ -1,8 +1,8 @@
 ---
-title: CS 180 Project 4A
+title: CS 180 Project 4
 theme: light
 favicon: favicon.svg
-description: CS 180 Project 4A — Image Warping and Mosaicing
+description: "CS 180 Project 4: Image Warping, Mosaicing, and Feature Matching"
 ---
 
 import Header from "./components/Header.astro";
@@ -29,9 +29,28 @@ import gymNN from "./assets/gym_rect_nn.png";
 import robotOrig from "./assets/robot_orig.jpg";
 import robotNN from "./assets/robot_rect_nn.png";
 import robotBil from "./assets/robot_rect_bilinear.png";
+import atriumHarris from "./assets/atrium2_small_harris.jpg";
+import atriumAnms from "./assets/atrium2_small_harris_robust.jpg";
+import atriumDesc from "./assets/atrium2_small_harris_robust_descriptors.jpg";
+import skylineHarris from "./assets/skyline_harris.jpg";
+import skylineAnms from "./assets/skyline_anms.jpg";
+import skylineDesc from "./assets/skyline_desc.jpg";
+import verticalHarris from "./assets/vertical_harris.jpg";
+import verticalAnms from "./assets/vertical_anms.jpg";
+import verticalDesc from "./assets/vertical_desc.jpg";
+import atriumMatches from "./assets/atrium_matches.jpg";
+import atriumMatchesRansac from "./assets/atrium_matches_ransac.jpg";
+import skylineMatches from "./assets/skyline_matches.jpg";
+import skylineMatchesRansac from "./assets/skyline_matches_ransac.jpg";
+import verticalMatches from "./assets/vertical_matches.jpg";
+import verticalMatchesRansac from "./assets/vertical_matches_ransac.jpg";
+import atriumAuto from "./assets/atrium_auto.jpg";
+import atriumAutoCrop from "./assets/atrium_auto_crop.jpg";
+import skylineAutoCrop from "./assets/skyline_auto_crop.jpg";
+import verticalAutoCrop from "./assets/vertical_auto_crop.jpg";
 
 <Header
-  title="Project 4A: Image Warping and Mosaicing"
+  title="Project 4: Image Warping, Mosaicing, and Feature Matching"
   conference="CS 180, UC Berkeley — Fall 2026"
   authors={[{ name: "Jeffrey Aaron", url: "https://jeffreyaaron.dev", institution: "UC Berkeley" }]}
   links={[{ name: "CS 180 Projects", url: "../", icon: "ri:arrow-left-line" }]}
@@ -374,3 +393,286 @@ def edgeWeight(x, y, w, h):
   <Picture slot="figure" src={vertical} alt="Vertical mosaic" />
   <Fragment slot="caption">Vertical mosaic (cropped)</Fragment>
 </Figure>
+
+<hr class="not-prose my-16 h-0 w-screen max-w-none ml-[calc(50%-50vw)] border-0 border-t-8 border-current opacity-90" />
+
+## Part B.1: Harris Corner Detection
+
+#### Sort the corners by strength
+
+First, we sort the corners by strength in descending order. This is because a point that is included in X radius will also include all points greater in strength. So we can optimize by computing only from the start to the ith element
+
+```python
+def get_top_n_corners(h, coords, N=100, cRobust=0.9):
+    # sort the points by h
+    responses = h[coords[0], coords[1]]
+    print(responses.shape)
+    order = np.argsort(-responses)
+    print(order.shape)
+    sorted_coords = coords[:, order]
+    sorted_responses = responses[order]
+
+    ...
+```
+
+#### Compute each corner's suppression radius
+
+Then we create a mask to filter out the points that don't meet the `f(x_i) < c_robust*f(x_j)` threshold.
+
+Then we use the provided dist2 function to calculated the distance from the i'th point to the other 0, ... i points. The min distance is recorded in the radius array.
+
+```python
+    ...
+
+    coordCount = len(coords[0])
+
+    radius = np.repeat(np.array([np.inf]), coordCount)
+
+    for i in range(1, coordCount):        
+        mask = sorted_responses[i] < cRobust * sorted_responses[:i]
+        if (np.sum(mask) == 0):
+            continue
+        points = sorted_coords[:, :i][:, mask]
+        dist = harris.dist2(sorted_coords[:, i][None, :], points.T)
+        minDist = np.min(dist)
+        radius[i] = minDist
+
+    ...
+```
+
+#### Keep the N corners with the largest radius
+
+Then we keep the N corners with the largest radius. The larger radii indicate that these points are farther away from each and these are the ones that are more likely to be well spaced. By iterating through each point and applying this algorithm, we ensure that all points get looked at and this ensures a even spacing around the whole image.
+
+```python
+    ...
+
+    selected_coords = sorted_coords[:, np.argsort(-radius)[:N]]
+
+    return selected_coords, radius
+```
+
+With just the Plain Corner detection, there are many many points. Way too many to be useful or relevant. This can be seen below and is solved by the ANMS algorithm just shown above.
+
+### Atrium
+
+<Figure>
+  <Picture slot="figure" src={atriumHarris} alt="Atrium Harris corners" />
+  <Fragment slot="caption">Harris corners</Fragment>
+</Figure>
+
+<Figure>
+  <Picture slot="figure" src={atriumAnms} alt="Atrium Harris corners after ANMS" />
+  <Fragment slot="caption">Harris corners with ANMS (500 points)</Fragment>
+</Figure>
+
+### Skyline
+
+<Figure>
+  <Picture slot="figure" src={skylineHarris} alt="Skyline Harris corners" />
+  <Fragment slot="caption">Harris corners</Fragment>
+</Figure>
+
+<Figure>
+  <Picture slot="figure" src={skylineAnms} alt="Skyline Harris corners after ANMS" />
+  <Fragment slot="caption">Harris corners with ANMS (500 points)</Fragment>
+</Figure>
+
+### Vertical
+
+<Figure>
+  <Picture slot="figure" src={verticalHarris} alt="Vertical Harris corners" />
+  <Fragment slot="caption">Harris corners</Fragment>
+</Figure>
+
+<Figure>
+  <Picture slot="figure" src={verticalAnms} alt="Vertical Harris corners after ANMS" />
+  <Fragment slot="caption">Harris corners with ANMS (500 points)</Fragment>
+</Figure>
+
+## Part B.2: Feature Descriptor Extraction
+
+The feature descriptor is pretty straightforward:
+
+- We first blur the image to reduce noise from affecting results.
+- We sample every `step` point to output an image of the desired patch size.
+- We normalize the patch by subtracting its mean and dividing by its standard deviation. This makes the descriptor ignore differences in brightness and contrast between the two images.
+- We convert the patch to a single vector by flattening it.
+
+This is our embedding for the point. It represents what the point looks like and allows us to easily tell how similar two points are.
+
+```python
+def get_descriptors(grayscale_image, coords, sigma = 2, blur_window = 40, patch_size = 8):
+    blurred = skimage.filters.gaussian(grayscale_image, sigma=sigma)
+    step = blur_window // patch_size
+    middle = blur_window // 2
+
+    descriptors = []
+
+    for i in range(len(coords[0])):
+        y, x = coords[0][i], coords[1][i]
+        patch = blurred[y-middle : y+middle, x-middle : x+middle]
+        patch = patch[::step, ::step]
+        patch = patch - np.mean(patch)
+        patch = patch / (np.std(patch) + 1e-8)
+        descriptors.append(patch.flatten())
+    return np.array(descriptors)
+```
+
+### Atrium
+
+<Figure>
+  <Picture slot="figure" src={atriumDesc} alt="Atrium normalized 8x8 descriptors" />
+  <Fragment slot="caption">Normalized 8x8 descriptors</Fragment>
+</Figure>
+
+### Skyline
+
+<Figure>
+  <Picture slot="figure" src={skylineDesc} alt="Skyline normalized 8x8 descriptors" />
+  <Fragment slot="caption">Normalized 8x8 descriptors</Fragment>
+</Figure>
+
+### Vertical
+
+<Figure>
+  <Picture slot="figure" src={verticalDesc} alt="Vertical normalized 8x8 descriptors" />
+  <Fragment slot="caption">Normalized 8x8 descriptors</Fragment>
+</Figure>
+
+## Part B.3: Feature Matching
+
+For the feature matching, I wrote a function that takes in two descriptor arrays from two different images. Then it uses the given dist2 function to compute the distances between every pair of descriptors. To compare descriptor X from image 1, we look at the Xth row and then get the 2 smallest values in that row. These are the two closest descriptors in image 2.
+
+Then we apply the ratio test. We divide the distance to the closest descriptor (d1) by the distance to the second closest (d2). If a point has a true match, d1 should be much smaller than d2, so the ratio is small. If d1 and d2 are about the same, the first point is not that much better than the second so we throw it out. We only keep the matches where the ratio is below the threshold of 0.3. The function returns the indices of the matching descriptors in both images.
+
+To choose the threshold, I looked at the graph and saw that the paper tested a threshold of 0.3. From the graph, this seem at the midpoint between a valid feature and an outlier.
+
+```python
+def matchFeatures(descriptors1, descriptors2, threshold=0.3):
+    distances2 = harris.dist2(descriptors1, descriptors2)
+    distances = np.sqrt(np.maximum(distances2, 0))
+
+    twoClosest = np.argsort(distances, axis = 1) [:, :2]
+    rows = np.arange(distances.shape[0])
+    d1 = distances[rows, twoClosest[:, 0]]
+    d2 = distances[rows, twoClosest[:, 1]]
+    mask = d1/d2 < threshold
+
+    image1_indices = np.where(mask)[0]
+    image2_indices = twoClosest[image1_indices, 0]
+    return image1_indices, image2_indices
+```
+
+### Atrium
+
+<Figure>
+  <Picture slot="figure" src={atriumMatches} alt="Atrium matched features" />
+  <Fragment slot="caption">Matched features (13 matches, all shown, unmatched points hidden)</Fragment>
+</Figure>
+
+### Skyline
+
+<Figure>
+  <Picture slot="figure" src={skylineMatches} alt="Skyline matched features" />
+  <Fragment slot="caption">Matched features (19 matches, all shown, unmatched points hidden)</Fragment>
+</Figure>
+
+### Vertical
+
+<Figure>
+  <Picture slot="figure" src={verticalMatches} alt="Vertical matched features" />
+  <Fragment slot="caption">Matched features (62 matches; 40 random matches shown, unmatched points hidden)</Fragment>
+</Figure>
+
+## Part B.4: RANSAC for Robust Homography
+
+In order to get good quality matches and remove outliers, we apply the RANSAC method. I remember when I first heard of this, it seems like a very complicated and scary thing to implement. However, the method was a lot more simpler than I thought. It involves samples of 4 pairs (so we can get a set of the min 8 equations to solve homography). We then take the pairs and fit a homography. We compare the distance of the projected points to the actual way points and then cut any that don't meet our threshold. We keep repeating this for many iterations and keep track of which one provided us a solution using the most number of inliers.
+
+```python
+def ransac_filter(keypoints1, keypoints2, threshold=10, max_iterations=100):
+    num_matches = len(keypoints1)
+    best_matches = None
+    best_matches_count = 0
+    best_inliers = np.zeros(num_matches, dtype=bool)
+    best_H = None
+    iterationCount = max_iterations
+    for i in range(iterationCount):
+        random_indices = np.random.choice(num_matches, size=4, replace=False)
+        random_matches1 = keypoints1[random_indices]
+        random_matches2 = keypoints2[random_indices]
+        H = computeH(random_matches1, random_matches2)
+        points = np.hstack([keypoints1, np.ones((len(keypoints1), 1))])
+        projected_points = points @ H.T
+        projected_points = projected_points[:, :2]/projected_points[:, 2:3]
+
+        errors = np.linalg.norm(projected_points - keypoints2, axis=1)
+        inliers = np.where(errors < threshold)[0]
+        if len(inliers) > best_matches_count:
+            best_matches_count = len(inliers)
+            best_inliers.fill(False)
+            best_inliers[inliers] = True
+            best_H = H
+
+    H_out = computeH(keypoints1[best_inliers], keypoints2[best_inliers])
+    return best_inliers, H_out
+```
+
+Comparing the manual and the automatic mosaics, I think that the manuals only slightly worse than the automatic ones. When I chose points for the manual ones, I could find myself doing a similar iterative proceses to determine which points were the best to keep to get the best output. Especially for the vertical one. With the automatic method, RANSAC is able to try many different combinations and keep the points that work. Also, it oftens keeps much more points than I kept when I did it manually.
+
+### Atrium
+
+<Figure>
+  <Picture slot="figure" src={atriumMatchesRansac} alt="Atrium RANSAC inliers and outliers" />
+  <Fragment slot="caption">RANSAC inliers in green, outliers in red (12 of 13 matches are inliers; all matches shown, unmatched points hidden)</Fragment>
+</Figure>
+
+<Figure>
+  <Picture slot="figure" src={atrium} alt="Atrium mosaic, manual points" />
+  <Fragment slot="caption">Manual (cropped)</Fragment>
+</Figure>
+
+<Figure>
+  <Picture slot="figure" src={atriumAutoCrop} alt="Atrium mosaic, automatic" />
+  <Fragment slot="caption">Automatic (cropped)</Fragment>
+</Figure>
+
+<Figure>
+  <Picture slot="figure" src={atriumAuto} alt="Atrium mosaic, automatic, uncropped" />
+  <Fragment slot="caption">Atrium mosaic, automatic, uncropped</Fragment>
+</Figure>
+
+### Skyline
+
+<Figure>
+  <Picture slot="figure" src={skylineMatchesRansac} alt="Skyline RANSAC inliers and outliers" />
+  <Fragment slot="caption">RANSAC inliers in green, outliers in red (19 of 19 matches are inliers; all matches shown, unmatched points hidden)</Fragment>
+</Figure>
+
+<Figure>
+  <Picture slot="figure" src={skyline} alt="Skyline mosaic, manual points" />
+  <Fragment slot="caption">Manual (cropped)</Fragment>
+</Figure>
+
+<Figure>
+  <Picture slot="figure" src={skylineAutoCrop} alt="Skyline mosaic, automatic" />
+  <Fragment slot="caption">Automatic (cropped)</Fragment>
+</Figure>
+
+### Vertical
+
+<Figure>
+  <Picture slot="figure" src={verticalMatchesRansac} alt="Vertical RANSAC inliers and outliers" />
+  <Fragment slot="caption">RANSAC inliers in green, outliers in red (61 of 62 matches are inliers; same 40 random matches shown, unmatched points hidden)</Fragment>
+</Figure>
+
+<Figure>
+  <Picture slot="figure" src={vertical} alt="Vertical mosaic, manual points" />
+  <Fragment slot="caption">Manual (cropped)</Fragment>
+</Figure>
+
+<Figure>
+  <Picture slot="figure" src={verticalAutoCrop} alt="Vertical mosaic, automatic" />
+  <Fragment slot="caption">Automatic (cropped)</Fragment>
+</Figure>
+

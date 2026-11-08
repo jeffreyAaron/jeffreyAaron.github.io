@@ -34,8 +34,8 @@ data.push({
 });
 
 data.push({
-    title: "Project 4A: Image Warping and Mosaicing",
-    organization: "Recovering homographies from hand-picked points, warping with nearest-neighbor and bilinear interpolation, rectifying images, and blending photos into mosaics.",
+    title: "Project 4: Image Warping, Mosaicing, and Feature Matching",
+    organization: "Recovering homographies from hand-picked points, warping, rectifying, and blending photos into mosaics, then detecting and matching features to stitch them automatically with RANSAC.",
     img: "mini/proj4aMini.jpg",
     href: "proj4a/",
     externalLink: false
