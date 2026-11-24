@@ -4,21 +4,31 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gerber Net Viewer</title>
-    <script type="module" crossorigin src="./assets/index-pSbaXuGd.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-ig7-MW9d.css">
+    <link rel="icon" type="image/png" href="./assets/favicon-t2X4hYhs.png" />
+    <script type="module" crossorigin src="./assets/index-D_LkIFrf.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-C4go8Ggg.css">
   </head>
   <body>
-    <aside id="side">
-      <header>
-        <h1>Gerber Net Viewer</h1>
-        <p class="sub">Click any copper to trace its net.</p>
-      </header>
-      <section class="load">
+    <header class="top">
+      <span class="brand"><img src="./assets/logo-BOUjqvES.png" alt="" />Gerber Net Viewer</span>
+      <div class="tgroup">
         <label class="btn primary">Open files / .zip<input id="file" type="file" multiple hidden /></label>
-        <button id="sample" class="btn" title="Cynthion by Great Scott Gadgets: a 4-layer USB test instrument">Example: Cynthion</button>
-        <button id="sample-sonic" class="btn" title="SonicSurface by UpnaLab: a 16×16 ultrasonic transducer array, 2 layers">Example: SonicSurface</button>
+        <details class="menu" id="examples">
+          <summary class="btn">Examples</summary>
+          <div class="menu-list">
+            <button id="sample" title="Cynthion by Great Scott Gadgets: a 4-layer USB test instrument">Cynthion<span>4-layer USB test instrument</span></button>
+            <button id="sample-sonic" title="SonicSurface by UpnaLab: a 16×16 ultrasonic transducer array, 2 layers">SonicSurface<span>16×16 ultrasonic array, 2 layers</span></button>
+            <button id="sample-diff-menu">Cynthion, before and after<span>An example comparison</span></button>
+          </div>
+        </details>
         <button id="compare-btn" class="btn">Compare…</button>
-      </section>
+      </div>
+      <span class="spacer"></span>
+      <button id="undo" class="btn" disabled title="Undo the last edit (⌘Z / Ctrl+Z)">Undo</button>
+      <button id="export" class="btn" disabled title="Download the files with your edits, ready for a fab">Export Gerbers</button>
+    </header>
+    <div class="app">
+    <aside id="side">
       <section id="repo-sec" hidden>
         <h2>Repository</h2>
         <div class="repo-head"><span id="repo-name"></span> <span class="branch" id="repo-branch"></span></div>
@@ -53,6 +63,10 @@
         <div class="legend-row"><span class="legend add"></span>added <span class="legend rem"></span>removed <span class="legend mv">→</span>part moved</div>
         <div id="changes"></div>
       </section>
+      <section id="edits-sec" hidden>
+        <h2>Edits <span id="edit-count" class="muted"></span></h2>
+        <ol id="edits"></ol>
+      </section>
       <section id="layers-sec" hidden>
         <h2>View</h2>
         <div class="row">
@@ -83,6 +97,47 @@
       </div>
       <div id="busy" class="overlay" hidden><div><div class="spinner"></div><p id="busy-msg">Working…</p></div></div>
       <div id="tip" hidden></div>
+      <div id="palette" class="palette" hidden>
+        <div class="tools" id="tools" role="toolbar" aria-label="Tools" aria-orientation="vertical">
+          <button class="tool on" data-tool="select" title="Select (V): click copper to trace its net"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l14 8-6 2-3 6z"/></svg><span>Select</span><kbd>V</kbd></button>
+          <button class="tool" data-tool="delete" title="Delete (D): click a trace segment, pad, pour or hole to remove it. Deleting a trace segment breaks its net in two."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg><span>Delete</span><kbd>D</kbd></button>
+          <button class="tool" data-tool="trace" title="Trace (T): click to start (on copper to continue its net, or in space for a new one), click to add corners, double-click or Enter to finish"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h6l6-12h6"/><circle cx="3" cy="18" r="1.6"/><circle cx="21" cy="6" r="1.6"/></svg><span>Trace</span><kbd>T</kbd></button>
+          <button class="tool" data-tool="hole" title="Hole (H): click to place a via, a pad or a mounting hole; slots take two clicks"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></svg><span>Hole</span><kbd>H</kbd></button>
+        </div>
+        <div class="tool-opts" id="opts-trace" hidden>
+          <label>Layer <select id="trace-layer"></select></label>
+          <label>Width <input id="trace-w" type="number" min="0.05" step="0.05" value="0.25" /> mm</label>
+        </div>
+        <div class="tool-opts" id="opts-hole" hidden>
+          <select id="hole-type" aria-label="Hole type"></select>
+          <label>Drill <input id="hole-d" type="number" min="0.1" step="0.05" /> mm</label>
+          <label>Pad <input id="hole-pad" type="number" min="0" step="0.05" /> mm</label>
+          <label class="chk-l"><input id="hole-plated" type="checkbox" /> Plated</label>
+        </div>
+        <p class="hint" id="tool-hint">Click any copper to trace its net</p>
+        <details class="keys">
+          <summary>Shortcuts <kbd>/</kbd></summary>
+          <dl>
+            <dt><kbd>V</kbd> <kbd>D</kbd> <kbd>T</kbd> <kbd>H</kbd></dt><dd>Select, Delete, Trace, Hole</dd>
+            <dt><kbd>Esc</kbd></dt><dd>Cancel, back to Select</dd>
+            <dt><kbd>⌘Z</kbd></dt><dd>Undo</dd>
+            <dt><kbd>Enter</kbd></dt><dd>Finish a trace · accept a join/cut</dd>
+            <dt><kbd>⌫</kbd></dt><dd>Remove the last trace point</dd>
+            <dt><kbd>Shift</kbd></dt><dd>Hold for 45° trace legs</dd>
+            <dt><kbd>[</kbd> <kbd>]</kbd></dt><dd>Trace width −/+ 0.05 mm</dd>
+            <dt><kbd>L</kbd></dt><dd>Next copper layer for traces</dd>
+            <dt><kbd>E</kbd></dt><dd>Export Gerbers</dd>
+            <dt><kbd>F</kbd> <kbd>B</kbd></dt><dd>Fit · view from bottom</dd>
+          </dl>
+        </details>
+      </div>
+      <div id="confirm" class="confirm" hidden role="alertdialog" aria-live="assertive">
+        <span id="confirm-msg"></span>
+        <span class="spacer"></span>
+        <button id="confirm-undo" class="btn small">Undo <kbd>Esc</kbd></button>
+        <button id="confirm-ok" class="btn small primary">Accept <kbd>Enter</kbd></button>
+      </div>
     </main>
+    </div>
   </body>
 </html>
