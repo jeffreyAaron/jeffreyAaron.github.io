@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerber Net Viewer</title>
+    <script type="module" crossorigin src="./assets/index-pSbaXuGd.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-ig7-MW9d.css">
+  </head>
+  <body>
+    <aside id="side">
+      <header>
+        <h1>Gerber Net Viewer</h1>
+        <p class="sub">Click any copper to trace its net.</p>
+      </header>
+      <section class="load">
+        <label class="btn primary">Open files / .zip<input id="file" type="file" multiple hidden /></label>
+        <button id="sample" class="btn" title="Cynthion by Great Scott Gadgets: a 4-layer USB test instrument">Example: Cynthion</button>
+        <button id="sample-sonic" class="btn" title="SonicSurface by UpnaLab: a 16×16 ultrasonic transducer array, 2 layers">Example: SonicSurface</button>
+        <button id="compare-btn" class="btn">Compare…</button>
+      </section>
+      <section id="repo-sec" hidden>
+        <h2>Repository</h2>
+        <div class="repo-head"><span id="repo-name"></span> <span class="branch" id="repo-branch"></span></div>
+        <div id="repo-dirty" class="warn" hidden></div>
+        <label class="field">Merge into <b id="repo-branch2"></b> from
+          <select id="merge-src"></select>
+        </label>
+        <label class="field" id="board-field" hidden>Board <select id="board-sel"></select></label>
+        <div class="row"><button id="preview-merge" class="btn primary small">Preview merge</button><button id="switch-branch" class="btn small">Switch to this branch</button></div>
+        <div id="repo-msg" class="muted"></div>
+      </section>
+      <section id="merge-sec" hidden>
+        <h2>Merge <span id="merge-title"></span></h2>
+        <div id="merge-summary"></div>
+        <div id="merge-conflicts"></div>
+        <div id="merge-check"></div>
+        <div class="row"><button id="do-merge" class="btn primary">Merge</button><button id="cancel-merge" class="btn small">Cancel</button></div>
+        <div id="merge-result"></div>
+      </section>
+      <section id="compare-load" hidden>
+        <h2>Compare two revisions</h2>
+        <div class="row"><label class="btn small">Before…<input id="file-a" type="file" multiple hidden /></label><span id="name-a" class="muted">not loaded</span></div>
+        <div class="row"><label class="btn small">After…<input id="file-b" type="file" multiple hidden /></label><span id="name-b" class="muted">not loaded</span></div>
+        <div class="row"><button id="run-compare" class="btn primary small" disabled>Compare</button><button id="sample-diff" class="btn small">Example comparison</button></div>
+      </section>
+      <section id="changes-sec" hidden>
+        <h2>Changes <span id="change-count" class="muted"></span></h2>
+        <div class="row">
+          <button id="side-a" class="btn small">Before</button><button id="side-b" class="btn small on">After</button><button id="blink" class="btn small" title="Flip between before and after (K)">Blink</button>
+          <label class="chk"><input id="show-changes" type="checkbox" checked /> changes</label>
+        </div>
+        <div class="legend-row"><span class="legend add"></span>added <span class="legend rem"></span>removed <span class="legend mv">→</span>part moved</div>
+        <div id="changes"></div>
+      </section>
+      <section id="layers-sec" hidden>
+        <h2>View</h2>
+        <div class="row">
+          <button id="flip" class="btn small">View from bottom</button>
+          <button id="fit" class="btn small">Fit</button>
+        </div>
+        <div id="layers"></div>
+      </section>
+      <section id="info-sec" hidden>
+        <h2>Selected net</h2>
+        <div id="info"></div>
+      </section>
+      <section id="nets-sec" hidden>
+        <h2>Nets <span id="net-count" class="muted"></span></h2>
+        <input id="search" type="search" placeholder="Search nets or pins (e.g. GND, U3.5)" />
+        <ul id="nets"></ul>
+      </section>
+      <section id="msgs"></section>
+      <footer class="muted">Click: select net · Shift-click: add net · Esc: clear · X: before/after · K: blink · Drag: pan · Wheel: zoom</footer>
+    </aside>
+    <main id="stage">
+      <canvas id="cv"></canvas>
+      <div id="drop" class="overlay">
+        <div>
+          <p class="big">Drop Gerber + drill files (or a .zip) here</p>
+          <p class="muted">Files are processed locally in your browser; nothing is uploaded.</p>
+        </div>
+      </div>
+      <div id="busy" class="overlay" hidden><div><div class="spinner"></div><p id="busy-msg">Working…</p></div></div>
+      <div id="tip" hidden></div>
+    </main>
+  </body>
+</html>
