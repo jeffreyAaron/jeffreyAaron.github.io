@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gerber Net Viewer</title>
     <link rel="icon" type="image/png" href="./assets/favicon-t2X4hYhs.png" />
-    <script type="module" crossorigin src="./assets/index-D_LkIFrf.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-C4go8Ggg.css">
+    <script type="module" crossorigin src="./assets/index-D6OFwBAb.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-B4xqNwUC.css">
   </head>
   <body>
     <header class="top">
@@ -21,9 +21,18 @@
             <button id="sample-diff-menu">Cynthion, before and after<span>An example comparison</span></button>
           </div>
         </details>
+        <details class="menu" id="gh-menu">
+          <summary class="btn">From GitHub…</summary>
+          <form class="menu-list gh-form" id="gh-form">
+            <span>A Gerber .zip in a public repo. Opening it gives you a link to share.</span>
+            <input id="gh-url" placeholder="github.com/owner/repo/blob/main/fab/board.zip" autocomplete="off" spellcheck="false" />
+            <button class="btn primary small">Open</button>
+          </form>
+        </details>
         <button id="compare-btn" class="btn">Compare…</button>
       </div>
       <span class="spacer"></span>
+      <button id="share" class="btn" hidden title="Copy a link that opens these Gerbers straight from GitHub">Copy link</button>
       <button id="undo" class="btn" disabled title="Undo the last edit (⌘Z / Ctrl+Z)">Undo</button>
       <button id="export" class="btn" disabled title="Download the files with your edits, ready for a fab">Export Gerbers</button>
     </header>
